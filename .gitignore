@@ -5,7 +5,23 @@
 *.ear
 /JOpenShowVar-core/dist/
 /JOpenShowVar-core/build/
-/JOpenShowVar-core/JavaApplication6/nbproject/private/
 /JOpenShowVar-swing/nbproject/private/
 /JOpenShowVar-swing/build/
 /JOpenShowVar-swing/dist/
+
+
+#netbeans specific
+core
+nbproject/*
+!nbproject/project.properties
+!nbproject/project.xml
+ 
+
+#general swap/backup files
+*.so
+*.log
+*.out
+*~
+*.swp
+*.DS_Store
+*.lock
