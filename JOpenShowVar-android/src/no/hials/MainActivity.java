@@ -8,6 +8,7 @@ import no.hials.crosscom.networking.Request;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
+import android.widget.TextView;
 import android.os.Build;
 
 public class MainActivity extends Activity implements Runnable {
@@ -24,22 +26,32 @@ public class MainActivity extends Activity implements Runnable {
 	private volatile boolean doRun = false;
 	private Thread kukaThread = null;
 
+	/*
+	 * private TextView xLabel; private TextView yLabel; private TextView
+	 * zLabel;
+	 */
+
 	public void connect(View view) {
+
 		if (kukaThread == null) {
 			kukaThread = new Thread(this);
 			kukaThread.start();
+
 		}
-		
+
 		if (doRun) {
 			doRun = false;
 			kukaThread.interrupt();
 			kukaThread = null;
+			/*
+			 * xLabel.setTextColor(Color.BLACK);
+			 * yLabel.setTextColor(Color.BLACK);
+			 * zLabel.setTextColor(Color.BLACK);
+			 */
 		} else {
 			doRun = true;
 		}
-		
-		
-		
+
 	}
 
 	@Override
@@ -51,6 +63,13 @@ public class MainActivity extends Activity implements Runnable {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+
+		/*
+		 * xLabel = (TextView) findViewById(R.id.xLabel); yLabel = (TextView)
+		 * findViewById(R.id.yLabel); zLabel = (TextView)
+		 * findViewById(R.id.zLabel);
+		 */
+
 	}
 
 	@Override
@@ -92,20 +111,22 @@ public class MainActivity extends Activity implements Runnable {
 
 	@Override
 	public void run() {
-		Log.d("Crosscom","Starting thread");
+		Log.d("Crosscom", "Starting thread");
 		CrossComClient client = null;
+
 		try {
 			String IP = "192.168.2.2";
 			int PORT = 7000;
 			client = new CrossComClient(IP, PORT);
+
+			Button xUpButton = (Button) findViewById(R.id.xIncButton);
+			Button xDownButton = (Button) findViewById(R.id.xDecButton);
+			Button yUpButton = (Button) findViewById(R.id.yIncButton);
+			Button yDownButton = (Button) findViewById(R.id.yDecButton);
+			Button zUpButton = (Button) findViewById(R.id.zIncButton);
+			Button zDownButton = (Button) findViewById(R.id.zDecButton);
+
 			while (doRun) {
-				
-				Button xUpButton = (Button) findViewById(R.id.button1);
-				Button xDownButton = (Button) findViewById(R.id.button2);
-				Button yUpButton = (Button) findViewById(R.id.button3);
-				Button yDownButton = (Button) findViewById(R.id.button4);
-				Button zUpButton = (Button) findViewById(R.id.button5);
-				Button zDownButton = (Button) findViewById(R.id.button6);
 
 				SeekBar slider = (SeekBar) findViewById(R.id.seekBar1);
 				double speed = slider.getProgress();
@@ -125,9 +146,10 @@ public class MainActivity extends Activity implements Runnable {
 				} else if (zDownButton.isPressed()) {
 					z = -speed;
 				}
-				Log.d("Crosscom", "{x=" + x + ", y=" + y + ", z=" + z + "}" + "\t" + "Stepsize= " + speed);
-				Callback callback = client.sendRequest(new Request(0, "MYPOS",
-						"{X " + x + ",Y " + y + ",Z " + z + "}"));
+				Log.d("Crosscom", "{x=" + x + ", y=" + y + ", z=" + z + "}"
+						+ "\t" + "Stepsize= " + speed);
+				client.sendRequest(new Request(0, "MYPOS", "{X " + x + ",Y "
+						+ y + ",Z " + z + "}"));
 
 			}
 		} catch (Exception e) {
@@ -135,9 +157,10 @@ public class MainActivity extends Activity implements Runnable {
 			e.printStackTrace();
 		} finally {
 			try {
-				Callback callback = client.sendRequest(new Request(0, "MYPOS",
-						"{X " + 0 + ",Y " + 0 + ",Z " + 0 + "}"));
+				client.sendRequest(new Request(0, "MYPOS", "{X " + 0 + ",Y "
+						+ 0 + ",Z " + 0 + "}"));
 				client.close();
+
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
