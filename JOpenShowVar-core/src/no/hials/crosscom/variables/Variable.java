@@ -1,7 +1,27 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (c) 2014, Aalesund University College
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 package no.hials.crosscom.variables;
 
@@ -10,10 +30,11 @@ import no.hials.crosscom.networking.Callback;
 
 /**
  * Represents a KRL variable
+ *
  * @author Lars Ivar
  * @param <E> Variable type
  */
-public abstract class Variable<E> implements Comparable<Variable> {
+public abstract class Variable<E> implements Comparable<Variable<E>> {
 
     private final int id;
     private final String name;
@@ -30,6 +51,7 @@ public abstract class Variable<E> implements Comparable<Variable> {
 
     /**
      * Get the name of the variable
+     *
      * @return the name of the variable
      */
     public String getName() {
@@ -38,7 +60,8 @@ public abstract class Variable<E> implements Comparable<Variable> {
 
     /**
      * Get the datatype: 'INT', 'REAL', 'BOOL', etc.
-     * @return 
+     *
+     * @return
      */
     public String getDataType() {
         return dataType;
@@ -46,6 +69,7 @@ public abstract class Variable<E> implements Comparable<Variable> {
 
     /**
      * Get the time it took to read the variable from the robot
+     *
      * @return the time it took to read the variable from the robot
      */
     public int getReadTime() {
@@ -54,6 +78,7 @@ public abstract class Variable<E> implements Comparable<Variable> {
 
     /**
      * Get the assigned ID of the variable
+     *
      * @return the assigned ID of the variable
      */
     public int getId() {
@@ -62,6 +87,7 @@ public abstract class Variable<E> implements Comparable<Variable> {
 
     /**
      * Get the value of the variable
+     *
      * @return the value of the variable
      */
     public E getValue() {
@@ -70,14 +96,16 @@ public abstract class Variable<E> implements Comparable<Variable> {
 
     /**
      * Sets the value of the variable
-     * @param value 
+     *
+     * @param value
      */
-    protected  void setValue(E value) {
+    protected void setValue(E value) {
         this.value = value;
     }
 
     /**
      * Updates the value
+     *
      * @param value the new value
      * @param readTime the new read time
      */
@@ -87,19 +115,31 @@ public abstract class Variable<E> implements Comparable<Variable> {
     }
 
     @Override
+    public int compareTo(Variable<E> o) {
+        if (toString().length() == o.toString().length()) {
+            return 0;
+        } else if (toString().length() < o.toString().length()) {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
+
+    @Override
     public String toString() {
         return "ID = " + id + "\t" + name + " = " + getValue() + "\t#ReadTime: " + readTime;
     }
 
     /**
      * Parses a string encoded KRL variable to a JOpenShowVar Variable
+     *
      * @param callback the Callback from the robot
      * @return the JOpenShowVar Variable
-     * @throws NumberFormatException 
+     * @throws NumberFormatException
      */
-    public static Variable parseVariable(Callback callback) throws NumberFormatException{
-        String variable = callback.getVariable();
-        String value = callback.getValue();
+    public static Variable parseVariable(Callback callback) throws NumberFormatException {
+        String variable = callback.getVariableName();
+        String value = callback.getStringValue();
         int id = callback.getId();
         int readTime = callback.getReadTime();
 //        int option = callback.getOption();
@@ -109,8 +149,8 @@ public abstract class Variable<E> implements Comparable<Variable> {
         if (sc.hasNextInt()) {
             var = new Int(id, variable, sc.nextInt(), readTime);
             sc.close();
-        }else if (sc.hasNextFloat()) {
-            var = new Real(id, variable, (double)sc.nextFloat(), readTime);
+        } else if (sc.hasNextFloat()) {
+            var = new Real(id, variable, (double) sc.nextFloat(), readTime);
             sc.close();
         } else if (sc.hasNextDouble()) {
             var = new Real(id, variable, sc.nextDouble(), readTime);
@@ -118,7 +158,7 @@ public abstract class Variable<E> implements Comparable<Variable> {
         } else if (sc.hasNextBoolean()) {
             var = new Bool(id, variable, sc.nextBoolean(), readTime);
             sc.close();
-        } else if (value.contains("{")){
+        } else if (value.contains("{")) {
             sc.close();
             var = new Struct(id, variable, Struct.parseString(value), readTime);
         } else {
@@ -128,14 +168,4 @@ public abstract class Variable<E> implements Comparable<Variable> {
         return var;
     }
 
-    @Override
-    public int compareTo(Variable o) {
-        if (toString().length() == o.toString().length()) {
-            return 0;
-        } else if (toString().length() < o.toString().length()) {
-            return -1;
-        } else {
-            return 1;
-        }
-    }
 }

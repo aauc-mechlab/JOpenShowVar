@@ -1,6 +1,7 @@
 package no.hials;
 
 import java.io.IOException;
+import java.text.Normalizer;
 
 import no.hials.crosscom.networking.Callback;
 import no.hials.crosscom.networking.CrossComClient;
@@ -9,7 +10,12 @@ import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
 import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,33 +27,24 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.os.Build;
 
-public class MainActivity extends Activity implements Runnable {
+public class MainActivity extends Activity implements Runnable, SensorEventListener {
 
+	private SensorManager sensorManager;
+	 double ax,ay,az;   // these are the acceleration in x,y and z axis
 	private volatile boolean doRun = false;
 	private Thread kukaThread = null;
-
-	/*
-	 * private TextView xLabel; private TextView yLabel; private TextView
-	 * zLabel;
-	 */
 
 	public void connect(View view) {
 
 		if (kukaThread == null) {
 			kukaThread = new Thread(this);
 			kukaThread.start();
-
 		}
 
 		if (doRun) {
 			doRun = false;
 			kukaThread.interrupt();
 			kukaThread = null;
-			/*
-			 * xLabel.setTextColor(Color.BLACK);
-			 * yLabel.setTextColor(Color.BLACK);
-			 * zLabel.setTextColor(Color.BLACK);
-			 */
 		} else {
 			doRun = true;
 		}
@@ -63,13 +60,8 @@ public class MainActivity extends Activity implements Runnable {
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
-
-		/*
-		 * xLabel = (TextView) findViewById(R.id.xLabel); yLabel = (TextView)
-		 * findViewById(R.id.yLabel); zLabel = (TextView)
-		 * findViewById(R.id.zLabel);
-		 */
-
+		sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY), SensorManager.SENSOR_DELAY_NORMAL);
 	}
 
 	@Override
@@ -146,6 +138,21 @@ public class MainActivity extends Activity implements Runnable {
 				} else if (zDownButton.isPressed()) {
 					z = -speed;
 				}
+				
+				/*double x = ax, y = ay, z = 0;
+				if (x > 10) {
+					x = 10;
+				} else if (x < -10) {
+					x = -10;
+				}
+				x = new NormUtil(10, -10, 1, -1).normalize(x) * speed;
+				if (y > 10) {
+					y = 10;
+				} else if (x < -10) {
+					y = -10;
+				}
+				y = new NormUtil(10, -10, 1, -1).normalize(y) * speed;*/
+				
 				Log.d("Crosscom", "{x=" + x + ", y=" + y + ", z=" + z + "}"
 						+ "\t" + "Stepsize= " + speed);
 				client.sendRequest(new Request(0, "MYPOS", "{X " + x + ",Y "
@@ -167,6 +174,23 @@ public class MainActivity extends Activity implements Runnable {
 			}
 		}
 
+	}
+
+	@Override
+	public void onSensorChanged(SensorEvent event) {
+		if (event.sensor.getType()==Sensor.TYPE_GRAVITY){
+            ax=event.values[0];
+                    ay=event.values[1];
+                    az=event.values[2];
+            }
+		Log.d("Accelometer", "x=" + ax + ", y=" + ay + ", z=" + az);
+		
+	}
+
+	@Override
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {
+		
+		
 	}
 
 }

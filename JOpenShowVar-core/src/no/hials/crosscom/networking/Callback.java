@@ -1,11 +1,32 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (c) 2014, Aalesund University College
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * * Redistributions of source code must retain the above copyright notice, this
+ *   list of conditions and the following disclaimer.
+ * * Redistributions in binary form must reproduce the above copyright notice,
+ *   this list of conditions and the following disclaimer in the documentation
+ *   and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE.
  */
 package no.hials.crosscom.networking;
 
 import java.util.Arrays;
+import no.hials.crosscom.variables.Variable;
 
 /**
  * When querying the KUKA, a Callback with a updated value of the requested variable is sent which this class represents
@@ -13,24 +34,24 @@ import java.util.Arrays;
  */
 public final class Callback {
 
-    private final String variable;
+    private final String variableName;
     private final int id, option, readTime;
-    private final String value;
+    private final String strValue;
 
     public Callback(String variable, byte[] bytes, int readTime) {
-        this.variable = variable;
+        this.variableName = variable;
         this.id = CrossComClient.getInt(bytes, 0);
         this.readTime = readTime;
         this.option = (int) bytes[4];
-        this.value = new String(Arrays.copyOfRange(bytes, 7, bytes.length)).trim();
+        this.strValue = new String(Arrays.copyOfRange(bytes, 7, bytes.length)).trim();
     }
 
     /**
      * Getter for the variable name
      * @return the name of the variable
      */
-    public String getVariable() {
-        return variable;
+    public String getVariableName() {
+        return variableName;
     }
 
     /**
@@ -61,12 +82,20 @@ public final class Callback {
      * Get the value of the Variable
      * @return value of the Variable (This is a String) The Variable class has a static method for parsing this
      */
-    public String getValue() {
-        return value;
+    public String getStringValue() {
+        return strValue;
+    }
+    
+    /**
+     * Getter for the callback variable
+     * @return the callback variable
+     */
+    public Variable getVariable() {
+        return Variable.parseVariable(this);
     }
 
     @Override
     public String toString() {
-        return "Callback{" + "variable=" + variable + ", id=" + id + ", option=" + option + ", readTime=" + readTime + ", value=" + value + '}';
+        return "Callback{" + "variable=" + variableName + ", id=" + id + ", option=" + option + ", readTime=" + readTime + ", value=" + strValue + '}';
     }
 }
