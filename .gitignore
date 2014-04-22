@@ -5,16 +5,18 @@
 *.ear
 /JOpenShowVar-core/dist/
 /JOpenShowVar-core/build/
-/JOpenShowVar-swing/nbproject/private/
 /JOpenShowVar-swing/build/
 /JOpenShowVar-swing/dist/
 
 
 #netbeans specific
-core
-nbproject/*
-!nbproject/project.properties
-!nbproject/project.xml
+/JOpenShowVar-core/nbproject/*
+/JOpenShowVar-core/!nbproject/project.properties
+/JOpenShowVar-core/!nbproject/project.xml
+
+/JOpenShowVar-swing/nbproject/*
+/JOpenShowVar-swing/!nbproject/project.properties
+/JOpenShowVar-swing/!nbproject/project.xml
  
 
 #general swap/backup files
