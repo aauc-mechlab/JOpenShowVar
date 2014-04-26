@@ -32,7 +32,7 @@ package no.hials.crosscom.variables;
  */
 public class Bool extends Variable<Boolean>{
 
-    public Bool(int id, String name, Boolean value, int readTime) {
+    public Bool(int id, String name, Boolean value, long readTime) {
         super(id, name, "Boolean", readTime);
         this.value = value;
     }

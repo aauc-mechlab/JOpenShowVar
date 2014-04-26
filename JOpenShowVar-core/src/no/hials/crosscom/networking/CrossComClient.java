@@ -60,7 +60,7 @@ public final class CrossComClient extends Socket  {
     }
 
     private Callback getCallback(String variable) throws IOException {
-        long t0 = System.currentTimeMillis();
+        long t0 = System.nanoTime();
         byte[] header = new byte[7];
         bis.read(header);
 
@@ -71,7 +71,7 @@ public final class CrossComClient extends Socket  {
         System.arraycopy(header, 0, data, 0, header.length);
         System.arraycopy(block, 0, data, header.length, block.length);
 
-        int readTime = (int) (System.currentTimeMillis() - t0);
+        long readTime = (System.nanoTime()- t0);
         return new Callback(variable, data, readTime);
     }
     

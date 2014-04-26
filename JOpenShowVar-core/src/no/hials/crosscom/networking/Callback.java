@@ -35,10 +35,11 @@ import no.hials.crosscom.variables.Variable;
 public final class Callback {
 
     private final String variableName;
-    private final int id, option, readTime;
+    private final int id, option;
+    private final long readTime;
     private final String strValue;
 
-    public Callback(String variable, byte[] bytes, int readTime) {
+    public Callback(String variable, byte[] bytes, long readTime) {
         this.variableName = variable;
         this.id = CrossComClient.getInt(bytes, 0);
         this.readTime = readTime;
@@ -72,9 +73,9 @@ public final class Callback {
 
     /**
      * The time it took from sending the request to get the Callback
-     * @return The time it took from sending the request to get the Callback
+     * @return The time it took from sending the request to get the Callback in nanoseconds
      */
-    public int getReadTime() {
+    public long getReadTime() {
         return readTime;
     }
 

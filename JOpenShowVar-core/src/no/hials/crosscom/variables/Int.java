@@ -31,7 +31,7 @@ package no.hials.crosscom.variables;
  */
 public class Int extends Variable<Integer> {
 
-    public Int(int id, String name, Integer value, int readTime) {
+    public Int(int id, String name, Integer value, long readTime) {
         super(id, name, "Int", readTime);
         this.value = value;
     }

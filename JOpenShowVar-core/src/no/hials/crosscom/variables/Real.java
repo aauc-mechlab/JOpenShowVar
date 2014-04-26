@@ -31,7 +31,7 @@ package no.hials.crosscom.variables;
  */
 public class Real extends Variable<Double> {
 
-    public Real(int id, String name, Double value, int readTime) {
+    public Real(int id, String name, Double value, long readTime) {
         super(id, name, "Real",  readTime);
         this.value = value;
     }

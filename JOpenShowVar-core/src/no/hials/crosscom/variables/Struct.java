@@ -35,7 +35,7 @@ import java.util.Scanner;
  */
 public class Struct extends Variable<List<StructNode>> {
     
-    public Struct(int id, String name, List<StructNode> value, int readTime) {
+    public Struct(int id, String name, List<StructNode> value, long readTime) {
         super(id, name, "Struct", readTime);
         this.value = value;
     }

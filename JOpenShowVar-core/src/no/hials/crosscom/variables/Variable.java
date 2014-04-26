@@ -39,10 +39,10 @@ public abstract class Variable<E> implements Comparable<Variable<E>> {
     private final int id;
     private final String name;
     private final String dataType;
-    private int readTime;
+    private long readTime;
     protected E value;
 
-    public Variable(int id, String name, String dataType, int readTime) {
+    public Variable(int id, String name, String dataType, long readTime) {
         this.id = id;
         this.name = name;
         this.dataType = dataType;
@@ -70,9 +70,9 @@ public abstract class Variable<E> implements Comparable<Variable<E>> {
     /**
      * Get the time it took to read the variable from the robot
      *
-     * @return the time it took to read the variable from the robot
+     * @return the time it took to read the variable from the robot in nanoseconds
      */
-    public int getReadTime() {
+    public long getReadTime() {
         return readTime;
     }
 
@@ -109,7 +109,7 @@ public abstract class Variable<E> implements Comparable<Variable<E>> {
      * @param value the new value
      * @param readTime the new read time
      */
-    public void update(E value, int readTime) {
+    public void update(E value, long readTime) {
         setValue(value);
         this.readTime = readTime;
     }
@@ -141,7 +141,7 @@ public abstract class Variable<E> implements Comparable<Variable<E>> {
         String variable = callback.getVariableName();
         String value = callback.getStringValue();
         int id = callback.getId();
-        int readTime = callback.getReadTime();
+        long readTime = callback.getReadTime();
 //        int option = callback.getOption();
 
         Scanner sc = new Scanner(value);
