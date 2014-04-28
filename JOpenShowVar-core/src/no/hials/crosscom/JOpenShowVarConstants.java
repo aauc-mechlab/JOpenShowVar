@@ -31,8 +31,6 @@ package no.hials.crosscom;
  */
 public class JOpenShowVarConstants {
 
-    
-   
     public static final String FILELOCATION_VAR_LIST = "Resources//Var_list.txt";
     public static final String FILELOCATION_ROBOT_IP = "Resources//Robot_IP.txt";
 
