@@ -16,7 +16,7 @@ Port 7000 has to set open from the SmartPad:
 Start-up -> Network configuration -> NAT -> Add port -> Port number 7000 and Permitted protocols: tcp/udp 
 
 Video showing a KUKA KR6 R900 sixx being controlled using JOpenShowVar as the communication interface
-http://youtu.be/T5owhNRG9VA
+https://www.youtube.com/watch?v=6aZZAK4oyGg
 
 Example code
 ===========
