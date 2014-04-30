@@ -1,21 +1,12 @@
-package no.hials;
+package no.hials.crosscom.android;
 
 import java.io.IOException;
-import java.text.Normalizer;
-
 import no.hials.crosscom.networking.Callback;
 import no.hials.crosscom.networking.CrossComClient;
 import no.hials.crosscom.networking.Request;
 import android.app.Activity;
-import android.app.ActionBar;
 import android.app.Fragment;
-import android.graphics.Color;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -25,12 +16,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.os.Build;
 
-public class MainActivity extends Activity implements Runnable, SensorEventListener {
 
-	private SensorManager sensorManager;
-	 double ax,ay,az;   // these are the acceleration in x,y and z axis
+
+public class MainActivity extends Activity implements Runnable {
+
 	private volatile boolean doRun = false;
 	private Thread kukaThread = null;
 
@@ -48,7 +38,6 @@ public class MainActivity extends Activity implements Runnable, SensorEventListe
 		} else {
 			doRun = true;
 		}
-
 	}
 
 	@Override
@@ -60,8 +49,6 @@ public class MainActivity extends Activity implements Runnable, SensorEventListe
 			getFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
-		sensorManager=(SensorManager) getSystemService(SENSOR_SERVICE);
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY), SensorManager.SENSOR_DELAY_NORMAL);
 	}
 
 	@Override
@@ -117,46 +104,45 @@ public class MainActivity extends Activity implements Runnable, SensorEventListe
 			Button yDownButton = (Button) findViewById(R.id.yDecButton);
 			Button zUpButton = (Button) findViewById(R.id.zIncButton);
 			Button zDownButton = (Button) findViewById(R.id.zDecButton);
+			
+			final TextView ovProValue = (TextView) findViewById(R.id.OV_PRO_value);
 
+			
+			double step = 1;
 			while (doRun) {
 
 				SeekBar slider = (SeekBar) findViewById(R.id.seekBar1);
-				double speed = slider.getProgress();
+				int speed = slider.getProgress();
+				final Callback callback = client.sendRequest(new Request(0, "$OV_PRO", Integer.toString(speed)));
+				this.runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+						ovProValue.setText(callback.getStringValue());
+						
+					}
+				});
+				
 				double x = 0, y = 0, z = 0;
 				if (xUpButton.isPressed()) {
-					x = speed;
+					x = step;
 				} else if (xDownButton.isPressed()) {
-					x = -speed;
+					x = -step;
 				}
 				if (yUpButton.isPressed()) {
-					y = speed;
+					y = step;
 				} else if (yDownButton.isPressed()) {
-					y = -speed;
+					y = -step;
 				}
 				if (zUpButton.isPressed()) {
-					z = speed;
+					z = step;
 				} else if (zDownButton.isPressed()) {
-					z = -speed;
+					z = -step;
 				}
-				
-				/*double x = ax, y = ay, z = 0;
-				if (x > 10) {
-					x = 10;
-				} else if (x < -10) {
-					x = -10;
-				}
-				x = new NormUtil(10, -10, 1, -1).normalize(x) * speed;
-				if (y > 10) {
-					y = 10;
-				} else if (x < -10) {
-					y = -10;
-				}
-				y = new NormUtil(10, -10, 1, -1).normalize(y) * speed;*/
-				
-				Log.d("Crosscom", "{x=" + x + ", y=" + y + ", z=" + z + "}"
-						+ "\t" + "Stepsize= " + speed);
-				client.sendRequest(new Request(0, "MYPOS", "{X " + x + ",Y "
-						+ y + ",Z " + z + "}"));
+
+
+				//Log.d("Crosscom", "{x=" + x + ", y=" + y + ", z=" + z + "}" + "\t" + "Stepsize= " + speed);
+				client.sendRequest(new Request(1, "MYPOS", "{X " + x + ",Y "+ y + ",Z " + z + "}"));
 
 			}
 		} catch (Exception e) {
@@ -164,33 +150,13 @@ public class MainActivity extends Activity implements Runnable, SensorEventListe
 			e.printStackTrace();
 		} finally {
 			try {
-				client.sendRequest(new Request(0, "MYPOS", "{X " + 0 + ",Y "
-						+ 0 + ",Z " + 0 + "}"));
 				client.close();
-
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 
-	}
-
-	@Override
-	public void onSensorChanged(SensorEvent event) {
-		if (event.sensor.getType()==Sensor.TYPE_GRAVITY){
-            ax=event.values[0];
-                    ay=event.values[1];
-                    az=event.values[2];
-            }
-		Log.d("Accelometer", "x=" + ax + ", y=" + ay + ", z=" + az);
-		
-	}
-
-	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-		
-		
 	}
 
 }

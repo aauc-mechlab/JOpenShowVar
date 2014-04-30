@@ -6,8 +6,9 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="no.hials.MainActivity$PlaceholderFragment" >
-
+    tools:context="no.hials.crosscom.android.MainActivity$PlaceholderFragment" >
+    
+    
     <ToggleButton
         android:id="@+id/toggleButton1"
         android:layout_width="wrap_content"
@@ -25,7 +26,7 @@
         android:layout_above="@+id/toggleButton1"
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="37dp"
-        android:max="10"
+        android:max="100"
         android:progress="1" />
 
     <TextView
@@ -124,5 +125,25 @@
          android:layout_toLeftOf="@+id/zDecButton"
           android:layout_marginRight="10dp"
          android:text="@string/increment" />
+
+     <TextView
+         android:id="@+id/OV_PRO_label"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_above="@+id/seekBar1"
+         android:layout_alignLeft="@+id/seekBar1"
+         android:layout_marginBottom="14dp"
+         android:text="@string/OV_PRO"
+         android:textAppearance="?android:attr/textAppearanceSmall" />
+
+     <TextView
+         android:id="@+id/OV_PRO_value"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_alignBaseline="@+id/OV_PRO_label"
+         android:layout_alignBottom="@+id/OV_PRO_label"
+         android:layout_toLeftOf="@+id/zIncButton"
+         android:text=""
+         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

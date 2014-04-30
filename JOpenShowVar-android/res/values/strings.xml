@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    
     <string name="app_name">JOpenShowVar-android</string>
     <string name="action_settings">Settings</string>
     
@@ -18,6 +18,8 @@
     <string name="yDown_button">Y_DOWN</string>
     <string name="zUp_button">Z_UP</string>
     <string name="zDown_button">Z_DOWN</string>
+    
+    <string name="OV_PRO">$OV_PRO = </string>
     
     <string name ="connect_toggleButton">Connect</string>
 
