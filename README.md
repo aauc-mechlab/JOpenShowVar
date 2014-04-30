@@ -1,15 +1,27 @@
 JOpenShowVar
 ============
 
-JOpenShowVar is a Java open-source cross-platform communication interface to Kuka robots that allows for reading and writing variables and data structures of the controlled manipulators. This interface, which is compatible with all Kuka robots that use KR C4 and previous versions, runs as a client on a remote computer connected with the Kuka controller via TCP/IP. JOpenShowVar opens up to a variety of possible applications making it possible to use different input devices and to develop alternative control methods.
+JOpenShowVar is a Java open-source cross-platform communication interface to Kuka robots that allows for 
+reading and writing variables and data structures of the controlled manipulators. This interface, which is
+compatible with all Kuka robots that use KR C4 and previous versions, runs as a client on a remote computer 
+connected with the Kuka controller via TCP/IP. JOpenShowVar opens up to a variety of possible applications 
+making it possible to use different input devices and to develop alternative control methods.
 
-To show the potential of the proposed interface, two case studies are presented. In the first one, JOpenShowVar is used to control a Kuka KR 6 R900 SIXX (KR AGILUS) robot from an Android mobile device. In the second case, the same manipulator is controlled by using a Leap Motion Controller that supports hand and finger motions as input without requiring contact or touching. Related simulations are carried out to validate efficiency and flexibility of the proposed communication interface.
+JOpenShowVar may be used to connect to a real KRC controller or a simulated one using the KUKA.OfficeLite package
 
+Usage
+=========
+KUKAVARPROXY must firstly be installed on the KUKA  SmartPad (copy paste the folder to somewhere in the windows environment -> run KUKAVARPROXY.exe)
+Port 7000 has to set open from the SmartPad:
+Start-up -> Network configuration -> NAT -> Add port -> Port number 7000 and Permitted protocols: tcp/udp 
 
+Video showing a KUKA KR6 R900 sixx being controlled using JOpenShowVar as the communication interface
 http://youtu.be/T5owhNRG9VA
 
-Example code:
-'''java
+Example code
+===========
+
+```java
 public class Example {
 
 	private static String robotIP = "192.168.2.2";
@@ -26,4 +38,8 @@ public class Example {
 	}
 
 }
-'''
+```
+
+Acknowledgements
+==============
+A big thanks to Massimiliano Fago, which is the original author of KUKAVARPROXY and the C++ project OpenShowVar (http://sourceforge.net/projects/openshowvar/)
