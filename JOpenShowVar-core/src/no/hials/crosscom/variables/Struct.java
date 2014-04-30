@@ -31,7 +31,7 @@ import java.util.Scanner;
 
 /**
  * Represents a STRUCT value in KRL
- * @author Lars Ivar
+ * @author Lars Ivar Hatledal
  */
 public class Struct extends Variable<List<StructNode>> {
     

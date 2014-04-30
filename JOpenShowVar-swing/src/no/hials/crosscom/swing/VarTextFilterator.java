@@ -32,7 +32,7 @@ import no.hials.crosscom.variables.Variable;
 
 /**
  * Filters variables
- * @author LarsIvar
+ * @author Lars Ivar Hatledal
  */
 public class VarTextFilterator implements TextFilterator<Variable>{
 

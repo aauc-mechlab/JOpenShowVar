@@ -51,7 +51,7 @@ import no.hials.crosscom.variables.Variable;
 
 /**
  *
- * @author LarsIvar
+ * @author Lars Ivar Hatledal
  */
 public class VarBrowser extends JPanel {
 

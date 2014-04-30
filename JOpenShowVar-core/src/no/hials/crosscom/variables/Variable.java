@@ -31,7 +31,7 @@ import no.hials.crosscom.networking.Callback;
 /**
  * Represents a KRL variable
  *
- * @author Lars Ivar
+ * @author Lars Ivar Hatledal
  * @param <E> Variable type
  */
 public abstract class Variable<E> implements Comparable<Variable<E>> {

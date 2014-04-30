@@ -39,7 +39,7 @@ import no.hials.crosscom.variables.TrackException;
 
 /**
  *
- * @author LarsIvar
+ * @author Lars Ivar Hatledal
  */
 public class AddVarPanel extends JPanel {
 

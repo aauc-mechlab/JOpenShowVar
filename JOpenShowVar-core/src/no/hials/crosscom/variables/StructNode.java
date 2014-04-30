@@ -27,7 +27,7 @@ package no.hials.crosscom.variables;
 
 /**
  * A node in a Struct
- * @author Lars Ivar
+ * @author Lars Ivar Hatledal
  * @param <E> type variable
  */
 public class StructNode<E> {

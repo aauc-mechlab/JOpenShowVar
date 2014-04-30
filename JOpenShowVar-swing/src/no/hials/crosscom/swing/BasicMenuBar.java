@@ -31,7 +31,7 @@ import javax.swing.JMenuItem;
 
 /**
  *
- * @author Lars Ivar
+ * @author Lars Ivar Hatledal
  */
 public class BasicMenuBar extends JMenuBar {
 

@@ -29,8 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author Lars Ivar
+ * Represents a request which is sent to the KUKAVARPROXY server
+ * @author Lars Ivar Hatledal
  */
 public class Request {
 

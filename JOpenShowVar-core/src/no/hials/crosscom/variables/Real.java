@@ -27,7 +27,7 @@ package no.hials.crosscom.variables;
 
 /**
  * Represents a REAL value in KRL
- * @author Lars Ivar
+ * @author Lars Ivar Hatledal
  */
 public class Real extends Variable<Double> {
 

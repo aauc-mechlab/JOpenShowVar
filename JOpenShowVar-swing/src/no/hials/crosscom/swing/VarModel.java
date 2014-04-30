@@ -40,21 +40,20 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Timer;
-import no.hials.crosscom.JOpenShowVarConstants;
+import static no.hials.crosscom.ApplicationLauncher.FILELOCATION_VAR_LIST;
 import no.hials.crosscom.networking.Callback;
 import no.hials.crosscom.networking.CrossComClient;
 import no.hials.crosscom.networking.Request;
 import no.hials.crosscom.variables.TrackException;
 import no.hials.crosscom.variables.Variable;
 
-
 /**
  *
  * @author Lars Ivar
  */
-public final class VarModel {
+public final class VarModel  {
 
-    private final EventList<Variable> variables = new BasicEventList<>();
+   private final EventList<Variable> variables = new BasicEventList<>();
     private final AtomicInteger ID = new AtomicInteger(0);
     private final CrossComClient client;
     private final Timer timer;
@@ -90,6 +89,13 @@ public final class VarModel {
         }
     }
 
+    public EventList<Variable> getVariables() {
+        return variables;
+    }
+
+    /**
+     * Updates the variable view
+     */
     public void update() {
         for (Variable var : variables) {
             Request request = new Request(var.getId(), var.getName());
@@ -111,14 +117,12 @@ public final class VarModel {
         }
     }
 
-    public EventList<Variable> getVariables() {
-        return variables;
-    }
-
     /**
      * Get a Variable by searching for the ID
+     *
      * @param id the ID of the variable
-     * @return the variable in the list with the same ID, or null if there are no such variable
+     * @return the variable in the list with the same ID, or null if there are
+     * no such variable
      */
     public Variable getByID(int id) {
         for (Variable var : variables) {
@@ -131,8 +135,10 @@ public final class VarModel {
 
     /**
      * Get a Variable by searching for the name
+     *
      * @param name the name of the variable
-     * @return the variable in the list with the same name, or null if there are no such variable
+     * @return the variable in the list with the same name, or null if there are
+     * no such variable
      */
     public Variable getByName(String name) {
         for (Variable var : variables) {
@@ -144,31 +150,34 @@ public final class VarModel {
     }
 
     /**
-     * Reads all the variable names from a text file, and adds them to the monitoring 
-     * @throws TrackException if a variable with the same name is already being monitored
+     * Reads all the variable names from a text file, and adds them to the
+     * monitoring
+     *
+     * @throws TrackException if a variable with the same name is already being
+     * monitored
      */
     public void restore() throws TrackException {
         try (
-                FileInputStream fis = new FileInputStream(JOpenShowVarConstants.FILELOCATION_VAR_LIST);
+                FileInputStream fis = new FileInputStream(FILELOCATION_VAR_LIST);
                 BufferedReader br = new BufferedReader(new InputStreamReader(fis))) {
 
             String var = "";
             while ((var = br.readLine()) != null) {
                 addVariable(var);
             }
-            
+
         } catch (IOException ex) {
             Logger.getLogger(VarModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     /**
-     * Saves the currently monitored variable names to a text file, so that they can later be retrieved
-     * Each variable is separated by a newline
+     * Saves the currently monitored variable names to a text file, so that they
+     * can later be retrieved Each variable is separated by a newline
      */
     public void save() {
         try (
-                FileOutputStream fos = new FileOutputStream(new File(JOpenShowVarConstants.FILELOCATION_VAR_LIST));
+                FileOutputStream fos = new FileOutputStream(new File(FILELOCATION_VAR_LIST));
                 BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos))) {
 
             StringBuilder sb = new StringBuilder();

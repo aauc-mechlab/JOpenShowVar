@@ -29,8 +29,8 @@ import java.util.Arrays;
 import no.hials.crosscom.variables.Variable;
 
 /**
- * When querying the KUKA, a Callback with a updated value of the requested variable is sent which this class represents
- * @author Lars Ivar
+ * When querying the KUKAVARPROXY, a Callback with a updated value of the requested variable is sent which this class represents
+ * @author Lars Ivar Hatledal
  */
 public final class Callback {
 

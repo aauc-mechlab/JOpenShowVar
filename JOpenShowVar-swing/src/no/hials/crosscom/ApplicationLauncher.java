@@ -32,7 +32,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
 import no.hials.crosscom.swing.AddVarPanel;
 import no.hials.crosscom.swing.BasicMenuBar;
 import no.hials.crosscom.swing.EditPanel;
@@ -42,26 +41,30 @@ import no.hials.crosscom.networking.CrossComClient;
 import no.hials.crosscom.variables.TrackException;
 
 /**
+ * Main class
  *
- * @author Lars Ivar
+ * @author Lars Ivar Hatledal
  */
 public class ApplicationLauncher {
-    
+
+    public static final String FILELOCATION_VAR_LIST = "Resources//Var_list.txt";
+    public static final String FILELOCATION_ROBOT_IP = "Resources//Robot_IP.txt";
     public static final String GUI_TITLE = "JOpenShowVar";
 
     public static void main(String[] args) throws IOException, TrackException {
-        FileInputStream fis = new FileInputStream(JOpenShowVarConstants.FILELOCATION_ROBOT_IP);
+        FileInputStream fis = new FileInputStream(FILELOCATION_ROBOT_IP);
         BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 
         String info[] = br.readLine().split(":");
-        String IP = "158.38.141.3";//info[0];
+        String IP = "158.38.141.234";//info[0];
         int PORT = Integer.parseInt(info[1]);
-        
+
         final CrossComClient client = new CrossComClient(IP, PORT);
-        final VarModel model = new VarModel(client);
-        model.restore();
+
         final JFrame frame = new JFrame(GUI_TITLE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        final VarModel model = new VarModel(client);
+        model.restore();
         frame.setJMenuBar(new BasicMenuBar(model));
         frame.setLayout(new BorderLayout());
         final EditPanel editPanel = new EditPanel(frame, model);
@@ -70,8 +73,7 @@ public class ApplicationLauncher {
         frame.getContentPane().add(new AddVarPanel(model), BorderLayout.SOUTH);
         frame.getContentPane().add(new JScrollPane(editPanel), BorderLayout.EAST);
         frame.pack();
-        SwingUtilities.invokeLater(() -> {
-            frame.setVisible(true);
-        });
+
+        frame.setVisible(true);
     }
 }

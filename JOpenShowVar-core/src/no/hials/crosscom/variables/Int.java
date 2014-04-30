@@ -27,7 +27,7 @@ package no.hials.crosscom.variables;
 
 /**
  * Represents a INT value in KRL
- * @author Lars Ivar
+ * @author Lars Ivar Hatledal
  */
 public class Int extends Variable<Integer> {
 

@@ -33,23 +33,24 @@ import java.net.UnknownHostException;
 
 /**
  * The Client used to communicate with KukaVarProxy
- * @author Lars Ivar
+ *
+ * @author Lars Ivar Hatledal
  */
-public final class CrossComClient extends Socket  {
+public final class CrossComClient extends Socket {
 
-    BufferedInputStream bis = new BufferedInputStream( getInputStream());
+    BufferedInputStream bis = new BufferedInputStream(getInputStream());
     BufferedOutputStream bos = new BufferedOutputStream(getOutputStream());
 
     public CrossComClient(String host, int port) throws UnknownHostException, IOException {
         super(host, port);
     }
 
-
     /**
      * Sends a request to the KUKA robot
+     *
      * @param request the request to send
      * @return a Callback from the robot with an updated variable value
-     * @throws IOException 
+     * @throws IOException
      */
     public Callback sendRequest(Request request) throws IOException {
         for (byte b : request.getCmd()) {
@@ -71,11 +72,10 @@ public final class CrossComClient extends Socket  {
         System.arraycopy(header, 0, data, 0, header.length);
         System.arraycopy(block, 0, data, header.length, block.length);
 
-        long readTime = (System.nanoTime()- t0);
+        long readTime = (System.nanoTime() - t0);
         return new Callback(variable, data, readTime);
     }
-    
-    
+
     /**
      * Converts a 2 bytes into a integer
      *

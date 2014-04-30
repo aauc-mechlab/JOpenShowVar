@@ -31,7 +31,7 @@ import no.hials.crosscom.variables.Variable;
 
 /**
  * Compares two variables
- * @author LarsIvar
+ * @author Lars Ivar Hatledal
  */
 public class VarComparator implements Comparator<Variable>{
 

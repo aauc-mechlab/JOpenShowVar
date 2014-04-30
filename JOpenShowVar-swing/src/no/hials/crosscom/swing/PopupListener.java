@@ -31,7 +31,7 @@ import javax.swing.JPopupMenu;
 
 /**
  * A PopupListerner
- * @author LarsIvar
+ * @author Lars Ivar Hatledal
  */
 public class PopupListener extends MouseAdapter {
 

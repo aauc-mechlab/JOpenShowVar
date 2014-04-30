@@ -31,7 +31,7 @@ import no.hials.crosscom.variables.Variable;
 
 /**
  *
- * @author Lars Ivar
+ * @author Lars Ivar Hatledal
  */
 public class Variables  {
     private final EventList<Variable> variables = new BasicEventList<>();

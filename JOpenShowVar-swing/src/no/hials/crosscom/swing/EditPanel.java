@@ -46,7 +46,7 @@ import no.hials.crosscom.variables.Variable;
 
 /**
  *
- * @author Lars Ivar
+ * @author Lars Ivar Hatledal
  */
 public class EditPanel extends JPanel {
 

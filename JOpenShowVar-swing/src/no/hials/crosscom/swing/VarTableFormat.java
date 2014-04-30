@@ -30,7 +30,7 @@ import no.hials.crosscom.variables.Variable;
 
 /**
  *
- * @author LarsIvar
+ * @author Lars Ivar Hatledal
  */
 public class VarTableFormat implements TableFormat<Variable> {
 
@@ -67,7 +67,7 @@ public class VarTableFormat implements TableFormat<Variable> {
         } else if (column == 3) {
             return var.getValue().toString();
         } else if (column == 4) {
-            return var.getReadTime() + " ms";
+            return var.getReadTime()/1000000 + " ms";
         }
 
         throw new IllegalStateException();
