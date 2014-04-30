@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>JOpenShowVar by aauc-mechlab</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>JOpenShowVar</h1>
+          <h2>Allows reading and writing variables to KUKA robots using a TCP/IP connection</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/aauc-mechlab/JOpenShowVar/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/aauc-mechlab/JOpenShowVar/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/aauc-mechlab/JOpenShowVar" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="jopenshowvar" class="anchor" href="#jopenshowvar"><span class="octicon octicon-link"></span></a>JOpenShowVar</h1>
+
+<p>JOpenShowVar is a Java open-source cross-platform communication interface to Kuka robots that allows for 
+reading and writing variables and data structures of the controlled manipulators. This interface, which is
+compatible with all Kuka robots that use KR C4 and previous versions, runs as a client on a remote computer 
+connected with the Kuka controller via TCP/IP. JOpenShowVar opens up to a variety of possible applications 
+making it possible to use different input devices and to develop alternative control methods.</p>
+
+<p>JOpenShowVar may be used to connect to a real KRC controller or a simulated one using the KUKA.OfficeLite package</p>
+
+<h1>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h1>
+
+<p>KUKAVARPROXY must firstly be installed on the KUKA  SmartPad (copy paste the folder to somewhere in the windows environment -&gt; run KUKAVARPROXY.exe)
+Port 7000 has to set open from the SmartPad:
+Start-up -&gt; Network configuration -&gt; NAT -&gt; Add port -&gt; Port number 7000 and Permitted protocols: tcp/udp </p>
+
+<p>Video showing a KUKA KR6 R900 sixx being controlled using JOpenShowVar as the communication interface
+<a href="https://www.youtube.com/watch?v=6aZZAK4oyGg">https://www.youtube.com/watch?v=6aZZAK4oyGg</a></p>
+
+<h1>
+<a name="example-code" class="anchor" href="#example-code"><span class="octicon octicon-link"></span></a>Example code</h1>
+
+<div class="highlight highlight-java"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Example</span> <span class="o">{</span>
+
+    <span class="kd">private</span> <span class="kd">static</span> <span class="n">String</span> <span class="n">robotIP</span> <span class="o">=</span> <span class="s">"192.168.2.2"</span><span class="o">;</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">int</span> <span class="n">port</span> <span class="o">=</span> <span class="mi">7000</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">CrosscomClient</span> <span class="n">client</span> <span class="o">=</span> <span class="k">new</span> <span class="n">CrossComClient</span><span class="o">(</span><span class="n">robotIP</span><span class="o">,</span> <span class="n">port</span><span class="o">);</span>  <span class="c1">//establish connection</span>
+
+        <span class="n">Callback</span> <span class="n">readRequest</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">sendRequest</span><span class="o">(</span><span class="k">new</span> <span class="n">Request</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="s">"$OV_JOG"</span><span class="o">));</span> <span class="c1">//read request</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">readRequest</span><span class="o">);</span>
+
+        <span class="n">Callback</span> <span class="n">writeRequest</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">sendRequest</span><span class="o">(</span><span class="k">new</span> <span class="n">Request</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="s">"$OV_JOG"</span><span class="o">,</span> <span class="s">"100"</span><span class="o">));</span> <span class="c1">//write request</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">writeRequest</span><span class="o">);</span>
+    <span class="o">}</span>
+
+<span class="o">}</span>
+</pre></div>
+
+<h1>
+<a name="acknowledgements" class="anchor" href="#acknowledgements"><span class="octicon octicon-link"></span></a>Acknowledgements</h1>
+
+<p>A big thanks to Massimiliano Fago, which is the original author of KUKAVARPROXY and the C++ project OpenShowVar (<a href="http://sourceforge.net/projects/openshowvar/">http://sourceforge.net/projects/openshowvar/</a>)</p>
+        </section>
+
+        <footer>
+          JOpenShowVar is maintained by <a href="https://github.com/aauc-mechlab">aauc-mechlab</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
