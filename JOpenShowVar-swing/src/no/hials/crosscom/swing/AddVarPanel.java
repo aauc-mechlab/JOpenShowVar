@@ -35,7 +35,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import no.hials.crosscom.variables.TrackException;
 
 /**
  *
@@ -63,7 +62,7 @@ public class AddVarPanel extends JPanel {
                 String var = textField.getText().trim();
                 try {
                     model.addVariable(var);
-                } catch (TrackException ex) {
+                } catch (Exception ex) {
                     Logger.getLogger(AddVarPanel.class.getName()).log(Level.SEVERE, null, ex);
                     JOptionPane.showMessageDialog(null, ex.getMessage(), "Message", JOptionPane.WARNING_MESSAGE);
                 }  finally {

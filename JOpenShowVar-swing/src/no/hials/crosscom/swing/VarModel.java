@@ -44,7 +44,6 @@ import static no.hials.crosscom.ApplicationLauncher.FILELOCATION_VAR_LIST;
 import no.hials.crosscom.networking.Callback;
 import no.hials.crosscom.networking.CrossComClient;
 import no.hials.crosscom.networking.Request;
-import no.hials.crosscom.variables.TrackException;
 import no.hials.crosscom.variables.Variable;
 
 /**
@@ -66,9 +65,9 @@ public final class VarModel  {
         timer.start();
     }
 
-    public void addVariable(String var) throws TrackException {
+    public void addVariable(String var) throws Exception {
         if (getByName(var) != null) {
-            throw new TrackException("A variable with the name '" + var + "' is already beeing tracked!");
+            throw new Exception("A variable with the name '" + var + "' is already beeing tracked!");
         }
         int id = ID.getAndAdd(1);
         Request request = new Request(id, var, null);
@@ -152,11 +151,8 @@ public final class VarModel  {
     /**
      * Reads all the variable names from a text file, and adds them to the
      * monitoring
-     *
-     * @throws TrackException if a variable with the same name is already being
-     * monitored
      */
-    public void restore() throws TrackException {
+    public void restore()  {
         try (
                 FileInputStream fis = new FileInputStream(FILELOCATION_VAR_LIST);
                 BufferedReader br = new BufferedReader(new InputStreamReader(fis))) {
@@ -166,7 +162,7 @@ public final class VarModel  {
                 addVariable(var);
             }
 
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(VarModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

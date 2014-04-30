@@ -38,7 +38,6 @@ import no.hials.crosscom.swing.EditPanel;
 import no.hials.crosscom.swing.VarBrowser;
 import no.hials.crosscom.swing.VarModel;
 import no.hials.crosscom.networking.CrossComClient;
-import no.hials.crosscom.variables.TrackException;
 
 /**
  * Main class
@@ -51,7 +50,7 @@ public class ApplicationLauncher {
     public static final String FILELOCATION_ROBOT_IP = "Resources//Robot_IP.txt";
     public static final String GUI_TITLE = "JOpenShowVar";
 
-    public static void main(String[] args) throws IOException, TrackException {
+    public static void main(String[] args) throws IOException {
         FileInputStream fis = new FileInputStream(FILELOCATION_ROBOT_IP);
         BufferedReader br = new BufferedReader(new InputStreamReader(fis));
 
