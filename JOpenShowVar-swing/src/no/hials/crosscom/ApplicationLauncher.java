@@ -31,6 +31,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import no.hials.crosscom.swing.AddVarPanel;
 import no.hials.crosscom.swing.BasicMenuBar;
@@ -51,14 +52,35 @@ public class ApplicationLauncher {
     public static final String GUI_TITLE = "JOpenShowVar";
 
     public static void main(String[] args) throws IOException {
-        FileInputStream fis = new FileInputStream(FILELOCATION_ROBOT_IP);
-        BufferedReader br = new BufferedReader(new InputStreamReader(fis));
+        CrossComClient client;
 
-        String info[] = br.readLine().split(":");
-        String IP = "158.38.141.234";//info[0];
-        int PORT = Integer.parseInt(info[1]);
-
-        final CrossComClient client = new CrossComClient(IP, PORT);
+        while (true) {
+            String answer = JOptionPane.showInputDialog(null, "Insert robot IP in the form '192.168.2.2:7000'", "Robot IP", JOptionPane.QUESTION_MESSAGE);
+            if (answer == null) {
+                JOptionPane.showMessageDialog(null, "Application will terminate..");
+                System.exit(0);
+            }
+            String[] split = answer.split(":");
+            if (split.length != 2) {
+                JOptionPane.showMessageDialog(null, "Wrong input format. Try again..");
+                continue;
+            }
+            String IP = split[0];
+            int port;
+            try {
+                port = Integer.parseInt(split[1]);
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(null, "Error parsing the port number. Try again..");
+                continue;
+            }
+            try {
+                client = new CrossComClient(IP, port);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+                continue;
+            }
+            break;
+        }
 
         final JFrame frame = new JFrame(GUI_TITLE);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
