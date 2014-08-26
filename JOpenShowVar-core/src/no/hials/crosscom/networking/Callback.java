@@ -29,7 +29,9 @@ import java.util.Arrays;
 import no.hials.crosscom.variables.Variable;
 
 /**
- * When querying the KUKAVARPROXY, a Callback with a updated value of the requested variable is sent which this class represents
+ * When querying the KUKAVARPROXY, a Callback with a updated value of the
+ * requested variable is sent which this class represents
+ *
  * @author Lars Ivar Hatledal
  */
 public final class Callback {
@@ -49,6 +51,7 @@ public final class Callback {
 
     /**
      * Getter for the variable name
+     *
      * @return the name of the variable
      */
     public String getVariableName() {
@@ -57,6 +60,7 @@ public final class Callback {
 
     /**
      * Getter for the ID of the callback variable
+     *
      * @return the id if the variable
      */
     public int getId() {
@@ -64,7 +68,9 @@ public final class Callback {
     }
 
     /**
-     * 0 means that the request was for reading, 1 means that the request was for writing
+     * 0 means that the request was for reading, 1 means that the request was
+     * for writing
+     *
      * @return the option type, should be 0 or 1
      */
     public int getOption() {
@@ -73,7 +79,9 @@ public final class Callback {
 
     /**
      * The time it took from sending the request to get the Callback
-     * @return The time it took from sending the request to get the Callback in nanoseconds
+     *
+     * @return The time it took from sending the request to get the Callback in
+     * nanoseconds
      */
     public long getReadTime() {
         return readTime;
@@ -81,14 +89,17 @@ public final class Callback {
 
     /**
      * Get the value of the Variable
-     * @return value of the Variable (This is a String) The Variable class has a static method for parsing this
+     *
+     * @return value of the Variable (This is a String) The Variable class has a
+     * static method for parsing this
      */
     public String getStringValue() {
         return strValue;
     }
-    
+
     /**
      * Getter for the callback variable
+     *
      * @return the callback variable
      */
     public Variable getVariable() {
@@ -97,6 +108,6 @@ public final class Callback {
 
     @Override
     public String toString() {
-        return "Callback{" + "variable=" + variableName + ", id=" + id + ", option=" + option + ", readTime=" + readTime + ", value=" + strValue + '}';
+        return "Callback{" + "variable=" + variableName + ", id=" + id + ", option=" + option + ", readTime=" + (readTime / 1000000) + "ms , value=" + strValue + '}';
     }
 }

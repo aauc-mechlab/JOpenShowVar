@@ -30,6 +30,9 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
+import no.hials.crosscom.variables.StructNode;
+import no.hials.crosscom.variables.Variable;
 
 /**
  * The Client used to communicate with KukaVarProxy
@@ -59,6 +62,33 @@ public final class CrossComClient extends Socket {
         bos.flush();
         return getCallback(request.getVariable());
     }
+
+    public double[] readJointAngles() throws IOException {
+        double[] robotAngles = new double[6];
+        Callback getAngles = sendRequest(new Request(0, "$AXIS_ACT"));
+        Variable parseAngles = Variable.parseVariable(getAngles);
+        List<StructNode> angleValues = (List<StructNode>) parseAngles.getValue();
+
+        for (int i = 0; i < 6; i++) {
+            robotAngles[i] = Double.parseDouble((String) angleValues.get(i).getValue());
+        }
+        return robotAngles;
+    }
+
+    public double[] readJointTorques() throws IOException {
+        double[] jointTorques = new double[6];
+        try {
+            for (int i = 0; i < 6; i++) {
+                Callback torque = sendRequest(new Request(0, "$TORQUE_AXIS_ACT[" + i + 1 + "]"));
+                jointTorques[i] = ((double) torque.getVariable().getValue());
+            }
+        } catch (NumberFormatException ex) {
+            System.err.println("Error reading torques. Returning array of zeros");
+            return new double[6];
+        }
+        return jointTorques;
+    }
+    
 
     private Callback getCallback(String variable) throws IOException {
         long t0 = System.nanoTime();
