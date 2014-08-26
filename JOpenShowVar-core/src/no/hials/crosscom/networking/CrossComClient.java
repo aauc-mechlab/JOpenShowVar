@@ -79,10 +79,11 @@ public final class CrossComClient extends Socket {
         double[] jointTorques = new double[6];
         try {
             for (int i = 0; i < 6; i++) {
-                Callback torque = sendRequest(new Request(0, "$TORQUE_AXIS_ACT[" + i + 1 + "]"));
+                Callback torque = sendRequest(new Request(0, "$TORQUE_AXIS_ACT[" + (i+1) + "]"));
                 jointTorques[i] = ((double) torque.getVariable().getValue());
             }
         } catch (NumberFormatException ex) {
+            System.out.println(ex);
             System.err.println("Error reading torques. Returning array of zeros");
             return new double[6];
         }
