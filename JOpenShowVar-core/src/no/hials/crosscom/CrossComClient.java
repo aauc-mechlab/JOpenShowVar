@@ -135,7 +135,6 @@ public final class CrossComClient extends Socket {
         
         int id = getInt(data, 0);
         String strValue = new String(Arrays.copyOfRange(data, 7, data.length)).trim(); 
-        System.out.println(strValue);
         var.update(id,  strValue, readTime);
         
     }

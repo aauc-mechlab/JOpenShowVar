@@ -21,7 +21,7 @@ Start-up -> Network configuration -> NAT -> Add port -> Port number 7000 and Per
 In order to successfully establish an connection to the server. Your IP must be assigned a static IP in the same subrange as the one defined in the the SmartPads network configuration.
 
 
-Example code
+Example code v0.1
 ===========
 
 ```java
@@ -46,6 +46,86 @@ public class Example {
 
 }
 ```
+
+
+Example code v0.2
+===========
+public class Test {
+
+    public static void main(String[] args) throws IOException, InterruptedException {
+        try (CrossComClient client = new CrossComClient("158.38.141.32", 7000)) {
+
+            KRLPos pos = new KRLPos("MYPOS").setX(2).setY(1);
+            client.writeVariable(pos);
+            System.out.println(pos);
+
+            client.readVariable(pos);
+            System.out.println(pos);
+            System.out.println(pos.getValue().get("X"));
+
+            KRLE6Axis axisAct = KRLVariable.AXIS_ACT();
+            client.readVariable(axisAct);
+            System.out.println(axisAct);
+
+            KRLReal jog = KRLVariable.OV_JOG();
+            client.readVariable(jog);
+            System.out.println(jog);
+
+            KRLReal pro = KRLVariable.OV_PRO();
+            client.readVariable(pro);
+            System.out.println(pro);
+
+            for (int i = 0; i < 100; i++) {
+                pro.setValue(i);
+               client.writeVariable(pro);
+                System.out.println(pro);
+                Thread.sleep(10);
+            }
+
+            KRLBool out1 = new KRLBool("$OUT[1]");
+            client.readVariable(out1);
+            System.out.println(out1);
+ 
+        }
+    }
+}
+
+Comparison between v0.1 and v0.2
+=================
+public class Test2 {
+
+    /**
+     * Comparison between v0.1 and v0.2
+     *
+     * @param args
+     * @throws IOException
+     * @throws InterruptedException
+     */
+    public static void main(String[] args) throws IOException, InterruptedException {
+        try (CrossComClient client = new CrossComClient("158.38.141.32", 7000)) {
+
+            //v0.1 read
+            Callback readRequest = client.sendRequest(new Request(0, "$OV_JOG")); //read request
+            System.out.println(readRequest);
+
+            //v0.1 write
+            Callback writeRequest = client.sendRequest(new Request(1, "$OV_JOG", "100")); //write request
+            System.out.println(writeRequest);
+
+            //v0.2 read
+            KRLReal jog = KRLVariable.OV_JOG();
+            client.readVariable(jog);
+            System.out.println(jog);
+
+            //v0.2 write
+            jog.setValue(10);
+            client.writeVariable(jog);
+            System.out.println(jog);
+
+        }
+    }
+}
+
 
 Repository contents
 ==================

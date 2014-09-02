@@ -1,3 +1,5 @@
+package no.hials.crosscom;
+
 /*
  * Copyright (c) 2014, Aalesund University College
  * All rights reserved.
@@ -23,13 +25,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package no.hials;
+
 
 import java.io.IOException;
-import no.hials.crosscom.CrossComClient;
-import no.hials.crosscom.KRL.KRLBool;
-import no.hials.crosscom.KRL.KRLE6Axis;
-import no.hials.crosscom.KRL.KRLPos;
 import no.hials.crosscom.KRL.KRLReal;
 import no.hials.crosscom.KRL.KRLVariable;
 
@@ -38,42 +36,37 @@ import no.hials.crosscom.KRL.KRLVariable;
  * Remember to set the IP and Port to fit your own setup! 
  * @author Lars Ivar Hatledal
  */
-public class Test {
+public class Test2 {
 
+    /**
+     * Comparison between v0.1 and v0.2
+     * @param args
+     * @throws IOException
+     * @throws InterruptedException 
+     */
     public static void main(String[] args) throws IOException, InterruptedException {
         try (CrossComClient client = new CrossComClient("158.38.141.32", 7000)) {
 
-            KRLPos pos = new KRLPos("MYPOS").setX(2).setY(1);
-            client.writeVariable(pos);
-            System.out.println(pos);
-
-            client.readVariable(pos);
-            System.out.println(pos);
-            System.out.println(pos.getValue().get("X"));
-
-            KRLE6Axis axisAct = KRLVariable.AXIS_ACT();
-            client.readVariable(axisAct);
-            System.out.println(axisAct);
-
-            KRLReal jog = KRLVariable.OV_JOG();
-            client.readVariable(jog);
-            System.out.println(jog);
-
-            KRLReal pro = KRLVariable.OV_PRO();
-            client.readVariable(pro);
-            System.out.println(pro);
-
-            for (int i = 0; i < 100; i++) {
-                pro.setValue(i);
-               client.writeVariable(pro);
-                System.out.println(pro);
-                Thread.sleep(10);
-            }
-
-            KRLBool out1 = new KRLBool("$OUT[1]");
-            client.readVariable(out1);
-            System.out.println(out1);
+            //Comparison between v0.1 and v0.2
             
+                //v0.1 read
+		Callback readRequest = client.sendRequest(new Request(0, "$OV_JOG")); //read request
+		System.out.println(readRequest);
+		
+		//v0.1 write
+		Callback writeRequest = client.sendRequest(new Request(1, "$OV_JOG", "100")); //write request
+		System.out.println(writeRequest);
+                
+                
+                //v0.2 read
+                KRLReal jog = KRLVariable.OV_JOG();
+                client.readVariable(jog);
+                System.out.println(jog);
+                
+                //v0.2 write
+                jog.setValue(10);
+                client.writeVariable(jog);
+                System.out.println(jog);
 
         }
     }
