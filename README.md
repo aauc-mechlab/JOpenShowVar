@@ -20,6 +20,10 @@ Start-up -> Network configuration -> NAT -> Add port -> Port number 7000 and Per
 
 In order to successfully establish an connection to the server. Your IP must be assigned a static IP in the same subrange as the one defined in the the SmartPads network configuration.
 
+Console application
+============
+JOpenShowVar-core features a simple which can be invoked by writing -java -jar JopenShowVar-core ipAddress port 
+
 
 Example code v0.1
 ===========
@@ -50,6 +54,7 @@ public class Example {
 
 Example code v0.2
 ===========
+```java
 public class Test {
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -89,9 +94,11 @@ public class Test {
         }
     }
 }
+```
 
 Comparison between v0.1 and v0.2
 =================
+```java
 public class Test2 {
 
     /**
@@ -125,7 +132,7 @@ public class Test2 {
         }
     }
 }
-
+```
 
 Repository contents
 ==================
