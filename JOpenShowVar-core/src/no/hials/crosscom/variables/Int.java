@@ -29,8 +29,10 @@ package no.hials.crosscom.variables;
  * Represents a INT value in KRL
  * @author Lars Ivar Hatledal
  */
+ @Deprecated 
 public class Int extends Variable<Integer> {
 
+      @Deprecated 
     public Int(int id, String name, Integer value, long readTime) {
         super(id, name, "Int", readTime);
         this.value = value;

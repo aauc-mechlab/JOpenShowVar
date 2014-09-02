@@ -23,7 +23,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package no.hials.crosscom.networking;
+package no.hials.crosscom;
 
 import java.util.Arrays;
 import no.hials.crosscom.variables.Variable;
@@ -34,6 +34,7 @@ import no.hials.crosscom.variables.Variable;
  *
  * @author Lars Ivar Hatledal
  */
+@Deprecated
 public final class Callback {
 
     private final String variableName;
@@ -41,12 +42,13 @@ public final class Callback {
     private final long readTime;
     private final String strValue;
 
-    public Callback(String variable, byte[] bytes, long readTime) {
+    @Deprecated
+    public Callback(String variable, byte[] data, long readTime) {
         this.variableName = variable;
-        this.id = CrossComClient.getInt(bytes, 0);
+        this.id = CrossComClient.getInt(data, 0);
         this.readTime = readTime;
-        this.option = (int) bytes[4];
-        this.strValue = new String(Arrays.copyOfRange(bytes, 7, bytes.length)).trim();
+        this.option = (int) data[4];
+        this.strValue = new String(Arrays.copyOfRange(data, 7, data.length)).trim(); 
     }
 
     /**

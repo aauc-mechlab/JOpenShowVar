@@ -27,14 +27,17 @@ package no.hials.crosscom.variables;
 
 /**
  * A node in a Struct
+ *
  * @author Lars Ivar Hatledal
  * @param <E> type variable
  */
+@Deprecated
 public class StructNode<E> {
 
     private final String name;
     private final E value;
 
+    @Deprecated
     public StructNode(String name, E value) {
         this.name = name;
         this.value = value;
@@ -42,6 +45,7 @@ public class StructNode<E> {
 
     /**
      * The name of the node
+     *
      * @return the name of the node
      */
     public String getName() {
@@ -50,6 +54,7 @@ public class StructNode<E> {
 
     /**
      * The value of the node
+     *
      * @return the value of the node
      */
     public E getValue() {

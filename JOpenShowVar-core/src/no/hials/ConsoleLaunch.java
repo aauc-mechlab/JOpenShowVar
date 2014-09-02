@@ -23,20 +23,20 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package no.hials.crosscom;
+package no.hials;
 
 import java.io.IOException;
 import java.util.Scanner;
-import no.hials.crosscom.networking.Callback;
-import no.hials.crosscom.networking.CrossComClient;
-import no.hials.crosscom.networking.Request;
+import no.hials.crosscom.Callback;
+import no.hials.crosscom.CrossComClient;
+import no.hials.crosscom.Request;
 
 /**
  * Simple console application for interfacing with KUKA robots 
  *
  * @author Lars Ivar Hatledal
  */
-public class Main {
+public class ConsoleLaunch {
 
     /**
      * @param args the command line arguments args[0] -> IP address args[1] ->
@@ -45,6 +45,8 @@ public class Main {
      * @throws java.lang.ClassNotFoundException
      */
     public static void main(String[] args) throws IOException, ClassNotFoundException {
+        
+        
         if (args.length != 2) {
             System.out.println("Error! Both IP and port must be provided as input arguments!");
             System.out.println("Terminating..");

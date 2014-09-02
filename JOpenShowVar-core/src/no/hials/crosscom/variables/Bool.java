@@ -30,8 +30,10 @@ package no.hials.crosscom.variables;
  * Represents a BOOL value in KRL
  * @author Lars Ivar Hatledal
  */
+ @Deprecated 
 public class Bool extends Variable<Boolean>{
 
+      @Deprecated 
     public Bool(int id, String name, Boolean value, long readTime) {
         super(id, name, "Boolean", readTime);
         this.value = value;

@@ -23,19 +23,41 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package no.hials.crosscom.variables;
+package no.hials.crosscom.KRL;
 
 /**
- * Represents a REAL value in KRL
+ * Represents a Int variable from the KRL language
+ *
  * @author Lars Ivar Hatledal
  */
- @Deprecated 
-public class Real extends Variable<Double> {
+public class KRLInt extends KRLVariable {
 
-      @Deprecated 
-    public Real(int id, String name, Double value, long readTime) {
-        super(id, name, "Real",  readTime);
+    private Integer value = null;
+
+    public KRLInt(String name) {
+        super(name);
+    }
+
+    @Override
+    public Integer getValue() {
+        return value;
+    }
+
+    @Override
+    public String getStringValue() {
+        return Integer.toString(value);
+    }
+
+    /**
+     * Sets the value of the variable
+     * @param value the value to set
+     */
+    public void setValue(int value) {
         this.value = value;
     }
 
+    @Override
+    protected void setValueFromString(String strValue) {
+        value = Integer.parseInt(strValue);
+    }
 }

@@ -23,13 +23,15 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package no.hials.crosscom.networking;
+package no.hials.crosscom;
 
+import no.hials.crosscom.KRL.KRLVariable;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Arrays;
 import java.util.List;
 import no.hials.crosscom.variables.StructNode;
 import no.hials.crosscom.variables.Variable;
@@ -79,7 +81,7 @@ public final class CrossComClient extends Socket {
         double[] jointTorques = new double[6];
         try {
             for (int i = 0; i < 6; i++) {
-                Callback torque = sendRequest(new Request(0, "$TORQUE_AXIS_ACT[" + (i+1) + "]"));
+                Callback torque = sendRequest(new Request(0, "$TORQUE_AXIS_ACT[" + (i + 1) + "]"));
                 jointTorques[i] = ((double) torque.getVariable().getValue());
             }
         } catch (NumberFormatException ex) {
@@ -89,7 +91,54 @@ public final class CrossComClient extends Socket {
         }
         return jointTorques;
     }
+
+    public void readVariable(KRLVariable var) throws IOException {
+        for (byte b : var.getReadCommand()) {
+            bos.write(b);
+        }
+        bos.flush();
+        long t0 = System.nanoTime();
+        byte[] header = new byte[7];
+        bis.read(header);
+
+        byte[] block = new byte[getInt(header, 2)];
+        bis.read(block);
+
+        byte[] data = new byte[header.length + block.length];
+        System.arraycopy(header, 0, data, 0, header.length);
+        System.arraycopy(block, 0, data, header.length, block.length);
+
+        long readTime = (System.nanoTime() - t0);
+        
+        int id = getInt(data, 0);
+        String strValue = new String(Arrays.copyOfRange(data, 7, data.length)).trim(); 
+        var.update(id, strValue, readTime);
+    }
     
+    public void writeVariable(KRLVariable var) throws IOException {
+        for (byte b : var.getWriteCommand()) {
+            bos.write(b);
+        }
+        bos.flush();
+        long t0 = System.nanoTime();
+        byte[] header = new byte[7];
+        bis.read(header);
+
+        byte[] block = new byte[getInt(header, 2)];
+        bis.read(block);
+
+        byte[] data = new byte[header.length + block.length];
+        System.arraycopy(header, 0, data, 0, header.length);
+        System.arraycopy(block, 0, data, header.length, block.length);
+
+        long readTime = (System.nanoTime() - t0);
+        
+        int id = getInt(data, 0);
+        String strValue = new String(Arrays.copyOfRange(data, 7, data.length)).trim(); 
+        System.out.println(strValue);
+        var.update(id,  strValue, readTime);
+        
+    }
 
     private Callback getCallback(String variable) throws IOException {
         long t0 = System.nanoTime();

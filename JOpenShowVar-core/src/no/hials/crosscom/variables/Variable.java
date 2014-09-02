@@ -26,14 +26,15 @@
 package no.hials.crosscom.variables;
 
 import java.util.Scanner;
-import no.hials.crosscom.networking.Callback;
+import no.hials.crosscom.Callback;
 
 /**
- * Represents a KRL variable
+ * Represents a KRL variable (deprecated)
  *
  * @author Lars Ivar Hatledal
  * @param <E> Variable type
  */
+ @Deprecated 
 public abstract class Variable<E> implements Comparable<Variable<E>> {
 
     private final int id;
@@ -42,6 +43,7 @@ public abstract class Variable<E> implements Comparable<Variable<E>> {
     private long readTime;
     protected E value;
 
+    @Deprecated 
     public Variable(int id, String name, String dataType, long readTime) {
         this.id = id;
         this.name = name;

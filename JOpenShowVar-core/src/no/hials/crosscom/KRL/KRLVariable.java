@@ -23,77 +23,97 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package no.hials.crosscom.networking;
+package no.hials.crosscom.KRL;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Represents a request which is sent to the KUKAVARPROXY server
+ * Represents a variable from the KRL language
  * @author Lars Ivar Hatledal
  */
-public class Request {
+public abstract class KRLVariable {
 
-    public static final char READ = 0;
-    public static final char WRITE = 1;
-
-    private final String var, val;
     private final int id;
-    private final Byte[] cmd;
+    private final String name;
 
-    /**
-     * Read constructor
-     *
-     * @param id the message id
-     * @param var the variable to write to
-     */
-    public Request(int id, String var) {
-        this(id, var, null);
+    private long readTime = -1;
+
+    private static final AtomicInteger idFactory = new AtomicInteger();
+
+    public KRLVariable(String name) {
+        this.name = name;
+        this.id = idFactory.getAndIncrement();
     }
 
     /**
-     * Write constructor
+     * The unique id of this variable. Can be used for sorting
      *
-     * @param id the message id
-     * @param var the variable to write to
-     * @param val the new value of the variable
+     * @return the id of this variable
      */
-    public Request(int id, String var, String val) {
-        this.id = id;
-        this.var = var;
-        this.val = val;
-        if (val == null) {
-            cmd = getReadCommand();
-        } else {
-            cmd = getWriteCommand();
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * The variable name of this variable. Should match a variable from the KUKA
+     * robot
+     *
+     * @return the name of this variable
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * The time it took to read/write this variable
+     *
+     * @return the time it took to read/write this variable in nanosesconds
+     */
+    public long getReadTimeNano() {
+        return readTime;
+    }
+
+    /**
+     * The time it took to read/write this variable
+     *
+     * @return the time it took to read/write this variable in milliseconds
+     */
+    public long getReadTimeMillis() {
+        return readTime / 1000000;
+    }
+
+    /**
+     * The time it took to read/write this variable
+     *
+     * @return the time it took to read/write this variable in seconds
+     */
+    public double getReadTimeSec() {
+        return ((double) readTime / 1000000000d);
+    }
+
+    /**
+     * NOTE! You should not use this method yourself. 
+     * @param id the variable id
+     * @param strValue the string value
+     * @param readTime the time it took to read the variable
+     */
+    public void update(int id, String strValue, long readTime) {
+        if (this.id != id) {
+            throw new RuntimeException("The returned id does not match the variable id! Should not happen...");
         }
+        this.readTime = readTime;
+        setValueFromString(strValue);
     }
 
-    /**
-     * Get the name of the variable
-     *
-     * @return the name of the variable
+    /*
+     * The read command. This is what's actually beeing sent to the robot.
+     * It's a implementation of the OpenShowVar c++ source
+     * @return the read command
      */
-    public String getVariable() {
-        return var;
-    }
-
-    /**
-     * Get the command to send (byte array)
-     *
-     * @return the command to send to the KUKA
-     */
-    public Byte[] getCmd() {
-        return cmd.clone();
-    }
-
-    /**
-     * The read command
-     *
-     * @return The read command
-     */
-    private Byte[] getReadCommand() {
-        byte[] cmd = var.getBytes();
+    public Byte[] getReadCommand() {
+        byte[] cmd = name.getBytes();
         List<Byte> header = new ArrayList<>();
         List<Byte> block = new ArrayList<>();
 
@@ -101,7 +121,7 @@ public class Request {
         byte lbyte = (byte) (cmd.length & 0x00ff);
 
         int index = 0;
-        block.add(index++, (byte) READ);
+        block.add(index++, (byte) 0);
         block.add(index++, hbyte);
         block.add(index++, lbyte);
         for (int i = 0; i < cmd.length; i++) {
@@ -124,14 +144,14 @@ public class Request {
         return block.toArray(new Byte[block.size()]);
     }
 
-    /**
-     * The write command
-     *
+    /*
+     * The write command. This is what's actually beeing sent to the robot.
+     * It's a implementation of the OpenShowVar c++ source
      * @return the write command
      */
-    private Byte[] getWriteCommand() {
-        byte[] cmd = var.getBytes();
-        byte[] value = val.getBytes();
+    public Byte[] getWriteCommand() {
+        byte[] cmd = name.getBytes();
+        byte[] value = getStringValue().getBytes();
         List<Byte> header = new ArrayList<>();
         List<Byte> block = new ArrayList<>();
 
@@ -139,7 +159,7 @@ public class Request {
         byte lbyte = (byte) (cmd.length & 0x00ff);
 
         int index = 0;
-        block.add(index++, (byte) WRITE);
+        block.add(index++, (byte) 1);
         block.add(index++, hbyte);
         block.add(index++, lbyte);
         for (int i = 0; i < cmd.length; i++) {
@@ -171,4 +191,33 @@ public class Request {
 
         return block.toArray(new Byte[block.size()]);
     }
+
+    public abstract Object getValue();
+
+    public abstract String getStringValue();
+
+    protected abstract void setValueFromString(String strValue);
+
+
+    public static KRLReal OV_JOG() {
+        return new KRLReal("$OV_JOG");
+    }
+
+    public static KRLReal OV_PRO() {
+        return new KRLReal("$OV_PRO");
+    }
+
+    public static KRLE6Axis AXIS_ACT() {
+        return new KRLE6Axis("$AXIS_ACT");
+    }
+
+    public static KRLReal POS_ACT() {
+        return new KRLReal("$POS_ACT");
+    }
+
+    @Override
+    public String toString() {
+        return "KRLVariable{" + "id=" + id + ", name=" + name + ", value=" + getValue() + ", readTime=" + getReadTimeMillis() + "ms" + '}';
+    }
+
 }

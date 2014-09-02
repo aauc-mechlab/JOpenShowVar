@@ -33,8 +33,10 @@ import java.util.Scanner;
  * Represents a STRUCT value in KRL
  * @author Lars Ivar Hatledal
  */
+ @Deprecated 
 public class Struct extends Variable<List<StructNode>> {
     
+     @Deprecated 
     public Struct(int id, String name, List<StructNode> value, long readTime) {
         super(id, name, "Struct", readTime);
         this.value = value;

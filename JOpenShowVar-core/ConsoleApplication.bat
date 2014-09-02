@@ -1,0 +1,1 @@
+java -jar dist/JOpenShowVar-core.jar 158.38.142.209 7000
