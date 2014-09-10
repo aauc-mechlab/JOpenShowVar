@@ -12,6 +12,21 @@ JOpenShowVar may be used to connect to a real KRC controller or a simulated one 
 Video showing a KUKA KR6 R900 sixx being controlled using JOpenShowVar as the communication interface
 https://www.youtube.com/watch?v=6aZZAK4oyGg
 
+
+
+Changelog
+===========
+0.1 -> 0.2:
+* The sendRequest method, and the Request and Callback classes are marked as deprecated, because you should use the read and writeVaribale methods instead. However, feel free to use the method if you don't know the dataype that will be returned. 
+* Introduced the read and writeVariable methods that in most cases will replace sendRequest.
+* Added a convenience method for reading the joint angles and the joint torques (readJointAngles() and readJointTorques())
+
+0.2 -> 0.2.1 
+* Added Enum datatype support 
+* Some internal code clean-up 
+ 
+
+
 Usage
 =========
 KUKAVARPROXY must firstly be started on the KUKA SmartPad (copy paste the folder to somewhere in the WinXP environment -> run KUKAVARPROXY.exe)
@@ -22,7 +37,7 @@ In order to successfully establish an connection to the server. Your IP must be 
 
 Console application
 ============
-JOpenShowVar-core features a simple which can be invoked by writing -java -jar JopenShowVar-core ipAddress port 
+JOpenShowVar-core features a simple console application which can be invoked by writing -java -jar JopenShowVar-core ipAddress port 
 
 
 Example code v0.1
@@ -52,27 +67,26 @@ public class Example {
 ```
 
 
-Example code v0.2
+Example code v0.2.1
 ===========
 ```java
 public class Test {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        try (CrossComClient client = new CrossComClient("158.38.141.32", 7000)) {
+        try (CrossComClient client = new CrossComClient("158.38.140.193", 7000)) {
 
-            KRLPos pos = new KRLPos("MYPOS").setX(2).setY(1);
+            KRLPos pos = new KRLPos("MYPOS").setX(2).setY(1);  //MYPOS is defined manually in $config.dat
             client.writeVariable(pos);
             System.out.println(pos);
 
             client.readVariable(pos);
             System.out.println(pos);
-            System.out.println(pos.getValue().get("X"));
 
-            KRLE6Axis axisAct = KRLVariable.AXIS_ACT();
+            KRLE6Axis axisAct = KRLVariable.AXIS_ACT(); // the same as new KRLE6Axis($AXIS_ACT)
             client.readVariable(axisAct);
             System.out.println(axisAct);
 
-            KRLReal jog = KRLVariable.OV_JOG();
+            KRLReal jog = KRLVariable.OV_JOG(); // the same as new KRLReal($OV_JOG)
             client.readVariable(jog);
             System.out.println(jog);
 
@@ -90,7 +104,13 @@ public class Test {
             KRLBool out1 = new KRLBool("$OUT[1]");
             client.readVariable(out1);
             System.out.println(out1);
- 
+            
+            KRLEnum mode = new KRLEnum("$MODE_OP");
+            client.readVariable(mode);
+            System.out.println(mode);
+            
+            System.out.println(Arrays.toString(client.readJointAngles()));
+            
         }
     }
 }
@@ -112,11 +132,11 @@ public class Test2 {
         try (CrossComClient client = new CrossComClient("158.38.141.32", 7000)) {
 
             //v0.1 read
-            Callback readRequest = client.sendRequest(new Request(0, "$OV_JOG")); //read request
+            Callback readRequest = client.sendRequest(new Request(0, "$OV_JOG")); 
             System.out.println(readRequest);
 
             //v0.1 write
-            Callback writeRequest = client.sendRequest(new Request(1, "$OV_JOG", "100")); //write request
+            Callback writeRequest = client.sendRequest(new Request(1, "$OV_JOG", "100")); 
             System.out.println(writeRequest);
 
             //v0.2 read

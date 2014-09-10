@@ -32,9 +32,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Arrays;
-import java.util.List;
-import no.hials.crosscom.variables.StructNode;
-import no.hials.crosscom.variables.Variable;
+import no.hials.crosscom.KRL.KRLE6Axis;
 
 /**
  * The Client used to communicate with KukaVarProxy
@@ -45,6 +43,8 @@ public final class CrossComClient extends Socket {
 
     BufferedInputStream bis = new BufferedInputStream(getInputStream());
     BufferedOutputStream bos = new BufferedOutputStream(getOutputStream());
+    
+    private final KRLE6Axis axis_act = new KRLE6Axis("$AXIS_ACT");
 
     public CrossComClient(String host, int port) throws UnknownHostException, IOException {
         super(host, port);
@@ -57,6 +57,7 @@ public final class CrossComClient extends Socket {
      * @return a Callback from the robot with an updated variable value
      * @throws IOException
      */
+    @Deprecated
     public Callback sendRequest(Request request) throws IOException {
         for (byte b : request.getCmd()) {
             bos.write(b);
@@ -65,16 +66,14 @@ public final class CrossComClient extends Socket {
         return getCallback(request.getVariable());
     }
 
+    /**
+     * convenience method for reading the current joint angles of the robot
+     * @return the current joint angles of the robot 6 angles and 6
+     * @throws IOException 
+     */
     public double[] readJointAngles() throws IOException {
-        double[] robotAngles = new double[6];
-        Callback getAngles = sendRequest(new Request(0, "$AXIS_ACT"));
-        Variable parseAngles = Variable.parseVariable(getAngles);
-        List<StructNode> angleValues = (List<StructNode>) parseAngles.getValue();
-
-        for (int i = 0; i < 6; i++) {
-            robotAngles[i] = Double.parseDouble((String) angleValues.get(i).getValue());
-        }
-        return robotAngles;
+        readVariable(axis_act);
+        return Arrays.copyOfRange(axis_act.asArray(), 0, 6);
     }
 
     public double[] readJointTorques() throws IOException {
@@ -92,6 +91,11 @@ public final class CrossComClient extends Socket {
         return jointTorques;
     }
 
+    /**
+     * Updates var with the values retrieved from variable with the same name in the controller.
+     * @param var the KRLVariable to read
+     * @throws IOException 
+     */
     public void readVariable(KRLVariable var) throws IOException {
         for (byte b : var.getReadCommand()) {
             bos.write(b);
@@ -115,6 +119,11 @@ public final class CrossComClient extends Socket {
         var.update(id, strValue, readTime);
     }
     
+    /**
+     * Writes the values in var to the variable with the same name in the controller
+     * @param var the KRLVariable to write
+     * @throws IOException 
+     */
     public void writeVariable(KRLVariable var) throws IOException {
         for (byte b : var.getWriteCommand()) {
             bos.write(b);
@@ -139,6 +148,12 @@ public final class CrossComClient extends Socket {
         
     }
 
+    /**
+     * Called internally by sendRequest
+     * @param variable the varibale name
+     * @return a callback with the values return by the controller
+     * @throws IOException 
+     */
     private Callback getCallback(String variable) throws IOException {
         long t0 = System.nanoTime();
         byte[] header = new byte[7];

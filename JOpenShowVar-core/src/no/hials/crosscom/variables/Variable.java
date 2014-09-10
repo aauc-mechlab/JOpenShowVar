@@ -160,6 +160,9 @@ public abstract class Variable<E> implements Comparable<Variable<E>> {
         } else if (sc.hasNextBoolean()) {
             var = new Bool(id, variable, sc.nextBoolean(), readTime);
             sc.close();
+        }else if (value.contains("#")) {
+            var = new Enum(id, variable, sc.nextLine(), readTime);
+            sc.close();
         } else if (value.contains("{")) {
             sc.close();
             var = new Struct(id, variable, Struct.parseString(value), readTime);

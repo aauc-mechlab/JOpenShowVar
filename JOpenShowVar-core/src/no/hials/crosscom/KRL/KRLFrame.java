@@ -23,107 +23,22 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
 package no.hials.crosscom.KRL;
 
 import java.util.HashMap;
 
 /**
  * Represents a Frame struct variable from the KRL language
+ *
  * @author Lars Ivar Hatledal
  */
 public final class KRLFrame extends KRLStruct {
 
+    private final HashMap<String, Double> struct = new HashMap<>();
+
     public KRLFrame(String name) {
         super(name, new String[]{"X", "Y", "Z", "A", "B", "C"});
         inititialize();
-    }
-
-     /**
-     * Sets X, Y and Z 
-     * @param values the new values
-     */
-    public void setXToZ(double ... values) {
-        if (values.length != 3) {
-            throw new IllegalArgumentException("The number of values should be exatly 3!");
-        }
-        setX(values[0]);
-        setY(values[1]);
-        setZ(values[2]);
-    }
-    
-     /**
-     * Sets A, B and C 
-     * @param values the new values
-     */
-    public void setAToC(double ... values) {
-        if (values.length != 3) {
-            throw new IllegalArgumentException("The number of values should be exatly 3!");
-        }
-        setA(values[0]);
-        setB(values[1]);
-        setC(values[2]);
-    }
-    
-
-     /**
-     * Sets the value of 'X'
-     * @param d the value to set
-     * @return this - so that method call chaining is possible 
-     */
-    public KRLFrame setX(double d) {
-        struct.put(nodes[0], d);
-        return this;
-    }
-
-     /**
-     * Sets the value of 'Y'
-     * @param d the value to set
-     * @return this - so that method call chaining is possible 
-     */
-    public KRLFrame setY(double d) {
-        struct.put(nodes[1], d);
-        return this;
-    }
-
-     /**
-     * Sets the value of 'Z'
-     * @param d the value to set
-     * @return this - so that method call chaining is possible 
-     */
-    public KRLFrame setZ(double d) {
-        struct.put(nodes[2], d);
-        return this;
-    }
-
-     /**
-     * Sets the value of 'A'
-     * @param d the value to set
-     * @return this - so that method call chaining is possible 
-     */
-    public KRLFrame setA(double d) {
-        struct.put(nodes[3], d);
-        return this;
-    }
-
-     /**
-     * Sets the value of 'B'
-     * @param d the value to set
-     * @return this - so that method call chaining is possible 
-     */
-    public KRLFrame setB(double d) {
-        struct.put(nodes[4], d);
-        return this;
-    }
-
-     /**
-     * Sets the value of 'C'
-     * @param d the value to set
-     * @return this - so that method call chaining is possible 
-     */
-    public KRLFrame setC(double d) {
-        struct.put(nodes[5], d);
-        return this;
     }
 
     /**
@@ -138,13 +53,108 @@ public final class KRLFrame extends KRLStruct {
         setC(0);
     }
 
+    /**
+     * Sets X, Y and Z
+     *
+     * @param values the new values
+     */
+    public void setXToZ(double... values) {
+        if (values.length != 3) {
+            throw new IllegalArgumentException("The number of values should be exatly 3!");
+        }
+        setX(values[0]);
+        setY(values[1]);
+        setZ(values[2]);
+    }
+
+    /**
+     * Sets A, B and C
+     *
+     * @param values the new values
+     */
+    public void setAToC(double... values) {
+        if (values.length != 3) {
+            throw new IllegalArgumentException("The number of values should be exatly 3!");
+        }
+        setA(values[0]);
+        setB(values[1]);
+        setC(values[2]);
+    }
+
+    /**
+     * Sets the value of 'X'
+     *
+     * @param d the value to set
+     * @return this - so that method call chaining is possible
+     */
+    public KRLFrame setX(double d) {
+        struct.put(nodes[0], d);
+        return this;
+    }
+
+    /**
+     * Sets the value of 'Y'
+     *
+     * @param d the value to set
+     * @return this - so that method call chaining is possible
+     */
+    public KRLFrame setY(double d) {
+        struct.put(nodes[1], d);
+        return this;
+    }
+
+    /**
+     * Sets the value of 'Z'
+     *
+     * @param d the value to set
+     * @return this - so that method call chaining is possible
+     */
+    public KRLFrame setZ(double d) {
+        struct.put(nodes[2], d);
+        return this;
+    }
+
+    /**
+     * Sets the value of 'A'
+     *
+     * @param d the value to set
+     * @return this - so that method call chaining is possible
+     */
+    public KRLFrame setA(double d) {
+        struct.put(nodes[3], d);
+        return this;
+    }
+
+    /**
+     * Sets the value of 'B'
+     *
+     * @param d the value to set
+     * @return this - so that method call chaining is possible
+     */
+    public KRLFrame setB(double d) {
+        struct.put(nodes[4], d);
+        return this;
+    }
+
+    /**
+     * Sets the value of 'C'
+     *
+     * @param d the value to set
+     * @return this - so that method call chaining is possible
+     */
+    public KRLFrame setC(double d) {
+        struct.put(nodes[5], d);
+        return this;
+    }
+
+    @Override
+    public void setValue(String str, String obj) {
+        struct.put(str, Double.parseDouble(obj));
+    }
+
     @Override
     public HashMap<String, Double> getValue() {
-        HashMap<String, Double> map = new HashMap<>();
-        for (String key : struct.keySet()) {
-            map.put(key, Double.parseDouble((String) struct.get(key)));
-        }
-        return map;
+        return struct;
     }
 
 }

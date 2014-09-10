@@ -25,62 +25,39 @@
  */
 package no.hials.crosscom.KRL;
 
-import java.util.HashMap;
-
 /**
- * Represents a Struct variable from the KRL language
- *
+ * Represents a Enum variable in the KRL
  * @author Lars Ivar Hatledal
  */
-public abstract class KRLStruct extends KRLVariable {
+public class KRLEnum extends KRLVariable {
 
-    protected String[] nodes;
+    private String value = null;
 
-    public KRLStruct(String name, String[] nodes) {
+    public KRLEnum(String name) {
         super(name);
-        this.nodes = nodes;
     }
 
     @Override
-    public abstract HashMap getValue();
-
-    public abstract void setValue(String str, String obj);
-
-    @Override
-    protected void setValueFromString(String strValue)  {
-        String substring;
-        if (strValue.contains(":")) {
-            String[] split = strValue.split(":");
-            String trim = split[1].trim();
-            substring = trim.substring(0, trim.length() - 1);
-
-        } else {
-            substring = strValue.substring(1, strValue.length() - 1);
-        }
-        String[] split1 = substring.split(",");
-
-        for (String n : split1) {
-            String[] split2 = n.trim().split(" ");
-            setValue(split2[0], split2[1]);
-        }
+    public String getValue() {
+        return value;
     }
 
     @Override
     public String getStringValue() {
-        HashMap map = getValue();
-        StringBuilder sb = new StringBuilder();
-        sb.append("{");
-        for (int i = 0; i < nodes.length; i++) {
-            if (map.containsKey(nodes[i])) {
-                Object get = map.remove(nodes[i]);
-                sb.append(nodes[i]).append(" ").append(get);
-                if (!map.isEmpty() && i != map.size()) {
-                    sb.append(", ");
-                }
-            }
-        }
-        sb.append("}");
-        return sb.toString();
+        return value;
     }
 
+    /**
+     * Sets the value of the variable
+     *
+     * @param value the value to set
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    @Override
+    protected void setValueFromString(String strValue) {
+        value = strValue;
+    }
 }

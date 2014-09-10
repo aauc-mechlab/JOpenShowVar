@@ -34,13 +34,34 @@ import java.util.HashMap;
  */
 public class KRLE6Axis extends KRLStruct {
 
+    private final HashMap<String, Double> struct = new HashMap<>();
+
     public KRLE6Axis(String name) {
         super(name, new String[]{"A1", "A2", "A3", "A4", "A5", "A6", "E1", "E2", "E3", "E4", "E5", "E6"});
         initialize();
     }
 
     /**
-     * Sets A1 to A6 
+     * Initializes the values 
+     */
+    private void initialize() {
+        setA1(0);
+        setA2(90);
+        setA3(-90);
+        setA4(0);
+        setA5(0);
+        setA6(0);
+        setE1(0);
+        setE2(0);
+        setE3(0);
+        setE4(0);
+        setE5(0);
+        setE6(0);
+    }
+
+    /**
+     * Sets A1 to A6
+     *
      * @param values the new values
      */
     public void setA1ToA6(double[] values) {
@@ -54,9 +75,10 @@ public class KRLE6Axis extends KRLStruct {
         setA5(values[4]);
         setA6(values[5]);
     }
-    
+
     /**
-     * Sets E1 to E6 
+     * Sets E1 to E6
+     *
      * @param values the new values
      */
     public void setE1ToE6(double[] values) {
@@ -203,30 +225,35 @@ public class KRLE6Axis extends KRLStruct {
         return this;
     }
 
-    /**
-     * Initiaizes the values to zero
-     */
-    private void initialize() {
-        setA1(0);
-        setA2(90);
-        setA3(-90);
-        setA4(0);
-        setA5(0);
-        setA6(0);
-        setE1(0);
-        setE2(0);
-        setE3(0);
-        setE4(0);
-        setE5(0);
-        setE6(0);
+    public double[] asArray() {
+        return new double[]{
+            struct.get("A1"),
+            struct.get("A2"),
+            struct.get("A3"),
+            struct.get("A4"),
+            struct.get("A5"),
+            struct.get("A6"),
+            struct.get("E1"),
+            struct.get("E2"),
+            struct.get("E3"),
+            struct.get("E4"),
+            struct.get("E5"),
+            struct.get("E6")
+        };
     }
 
     @Override
     public HashMap<String, Double> getValue() {
-        HashMap<String, Double> map = new HashMap<>();
-        for (String key : struct.keySet()) {
-            map.put(key, Double.parseDouble((String) struct.get(key)));
-        }
-        return map;
+        return struct;
+//        HashMap<String, Double> map = new HashMap<>();
+//        for (String key : struct.keySet()) {
+//            map.put(key, Double.parseDouble((String) struct.get(key)));
+//        }
+//        return map;
+    }
+
+    @Override
+    public void setValue(String str, String obj) {
+        struct.put(str, Double.parseDouble(obj));
     }
 }

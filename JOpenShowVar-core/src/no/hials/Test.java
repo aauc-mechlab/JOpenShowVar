@@ -26,9 +26,11 @@
 package no.hials;
 
 import java.io.IOException;
+import java.util.Arrays;
 import no.hials.crosscom.CrossComClient;
 import no.hials.crosscom.KRL.KRLBool;
 import no.hials.crosscom.KRL.KRLE6Axis;
+import no.hials.crosscom.KRL.KRLEnum;
 import no.hials.crosscom.KRL.KRLPos;
 import no.hials.crosscom.KRL.KRLReal;
 import no.hials.crosscom.KRL.KRLVariable;
@@ -41,21 +43,20 @@ import no.hials.crosscom.KRL.KRLVariable;
 public class Test {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        try (CrossComClient client = new CrossComClient("158.38.141.32", 7000)) {
+        try (CrossComClient client = new CrossComClient("158.38.140.193", 7000)) {
 
-            KRLPos pos = new KRLPos("MYPOS").setX(2).setY(1);
+            KRLPos pos = new KRLPos("MYPOS").setX(2).setY(1);  //MYPOS is defined manually in $config.dat
             client.writeVariable(pos);
             System.out.println(pos);
 
             client.readVariable(pos);
             System.out.println(pos);
-            System.out.println(pos.getValue().get("X"));
 
-            KRLE6Axis axisAct = KRLVariable.AXIS_ACT();
+            KRLE6Axis axisAct = KRLVariable.AXIS_ACT(); // the same as new KRLE6Axis($AXIS_ACT)
             client.readVariable(axisAct);
             System.out.println(axisAct);
 
-            KRLReal jog = KRLVariable.OV_JOG();
+            KRLReal jog = KRLVariable.OV_JOG(); // the same as new KRLReal($OV_JOG)
             client.readVariable(jog);
             System.out.println(jog);
 
@@ -74,7 +75,12 @@ public class Test {
             client.readVariable(out1);
             System.out.println(out1);
             
-
+            KRLEnum mode = new KRLEnum("$MODE_OP");
+            client.readVariable(mode);
+            System.out.println(mode);
+            
+            System.out.println(Arrays.toString(client.readJointAngles()));
+            
         }
     }
 }

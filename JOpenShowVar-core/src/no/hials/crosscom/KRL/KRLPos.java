@@ -34,9 +34,25 @@ import java.util.HashMap;
  */
 public final class KRLPos extends KRLStruct {
 
+    private final HashMap<String, Double> struct = new HashMap<>();
+
     public KRLPos(String name) {
         super(name, new String[]{"X", "Y", "Z", "A", "B", "C", "S", "T"});
         inititialize();
+    }
+
+    /**
+     * Initializes the values
+     */
+    private void inititialize() {
+        setX(0);
+        setY(0);
+        setZ(0);
+        setA(0);
+        setB(0);
+        setC(0);
+        setS(0);
+        setT(0);
     }
 
     /**
@@ -155,28 +171,14 @@ public final class KRLPos extends KRLStruct {
         return this;
     }
 
-    /**
-     * Default init values to zero
-     */
-    private void inititialize() {
-        setX(0);
-        setY(0);
-        setZ(0);
-        setA(0);
-        setB(0);
-        setC(0);
-        setS(0);
-        setT(0);
-
+    @Override
+    public HashMap<String, Double> getValue() {
+        return struct;
     }
 
     @Override
-    public HashMap<String, Double> getValue() {
-        HashMap<String, Double> map = new HashMap<>();
-        for (String key : struct.keySet()) {
-            map.put(key, Double.parseDouble((String) struct.get(key)));
-        }
-        return map;
+    public void setValue(String str, String obj) {
+        struct.put(str, Double.parseDouble(obj));
     }
 
 }

@@ -34,16 +34,39 @@ import java.util.HashMap;
  */
 public final class KRLE6Pos extends KRLStruct {
 
+    private final HashMap<String, Double> struct = new HashMap<>();
+
     public KRLE6Pos(String name) {
         super(name, new String[]{"X", "Y", "Z", "A", "B", "C", "E1", "E2", "E3", "E4", "E5", "E6", "S", "T"});
         inititialize();
     }
-    
-     /**
-     * Sets X, Y and Z 
+
+    /**
+     * Initializes the values
+     */
+    private void inititialize() {
+        setX(0);
+        setY(0);
+        setZ(0);
+        setA(0);
+        setB(0);
+        setC(0);
+        setE1(0);
+        setE2(0);
+        setE3(0);
+        setE4(0);
+        setE5(0);
+        setE6(0);
+        setS(0);
+        setT(0);
+    }
+
+    /**
+     * Sets X, Y and Z
+     *
      * @param values the new values
      */
-    public void setXToZ(double ... values) {
+    public void setXToZ(double... values) {
         if (values.length != 3) {
             throw new IllegalArgumentException("The number of values should be exatly 3!");
         }
@@ -51,12 +74,13 @@ public final class KRLE6Pos extends KRLStruct {
         setY(values[1]);
         setZ(values[2]);
     }
-    
-     /**
-     * Sets A, B and C 
+
+    /**
+     * Sets A, B and C
+     *
      * @param values the new values
      */
-    public void setAToC(double ... values) {
+    public void setAToC(double... values) {
         if (values.length != 3) {
             throw new IllegalArgumentException("The number of values should be exatly 3!");
         }
@@ -64,12 +88,13 @@ public final class KRLE6Pos extends KRLStruct {
         setB(values[1]);
         setC(values[2]);
     }
-    
-     /**
+
+    /**
      * Sets E1 to E6
+     *
      * @param values the new values
      */
-    public void setE1ToE6(double ... values) {
+    public void setE1ToE6(double... values) {
         if (values.length != 6) {
             throw new IllegalArgumentException("The number of values should be exatly 6!");
         }
@@ -235,34 +260,14 @@ public final class KRLE6Pos extends KRLStruct {
         return this;
     }
 
-    /**
-     * Initializes the values to zero
-     */
-    private void inititialize() {
-        setX(0);
-        setY(0);
-        setZ(0);
-        setA(0);
-        setB(0);
-        setC(0);
-        setE1(0);
-        setE2(0);
-        setE3(0);
-        setE4(0);
-        setE5(0);
-        setE6(0);
-        setS(0);
-        setT(0);
-
+    @Override
+    public void setValue(String str, String obj) {
+        struct.put(str, Double.parseDouble(obj));
     }
 
     @Override
     public HashMap<String, Double> getValue() {
-        HashMap<String, Double> map = new HashMap<>();
-        for (String key : struct.keySet()) {
-            map.put(key, Double.parseDouble((String) struct.get(key)));
-        }
-        return map;
+        return struct;
     }
 
 }

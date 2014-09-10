@@ -23,40 +23,20 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package no.hials.crosscom.KRL;
+package no.hials.crosscom.variables;
 
 /**
- * Represents a Bool variable from the KRL language
+ * Represents a Enum datatype
+ *
  * @author Lars Ivar Hatledal
  */
-public class KRLBool extends KRLVariable {
+@Deprecated
+public class Enum extends Variable<String> {
 
-    private Boolean value = null;
-
-    public KRLBool(String name) {
-        super(name);
-    }
-
-    @Override
-    public Boolean getValue() {
-        return value;
-    }
-
-    @Override
-    public String getStringValue() {
-        return Boolean.toString(value);
-    }
-
-    /**
-     * Sets the value of the variable
-     * @param value the value to set
-     */
-    public void setValue(boolean value) {
+    @Deprecated
+    public Enum(int id, String name, String value, long readTime) {
+        super(id, name, "Enum", readTime);
         this.value = value;
     }
 
-    @Override
-    protected void setValueFromString(String strValue) {
-        value = Boolean.parseBoolean(strValue);
-    }
 }

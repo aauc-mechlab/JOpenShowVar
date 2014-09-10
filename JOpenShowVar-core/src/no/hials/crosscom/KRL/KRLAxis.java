@@ -26,13 +26,15 @@
 package no.hials.crosscom.KRL;
 
 import java.util.HashMap;
-import no.hials.crosscom.CrossComClient;
 
 /**
- * Represents a Axis struct variable from the KRL language
+ * Represents a Axis Struct variable from the KRL language
+ *
  * @author Lars Ivar Hatledal
  */
 public final class KRLAxis extends KRLStruct {
+
+    private final HashMap<String, Double> struct = new HashMap<>();
 
     public KRLAxis(String name) {
         super(name, new String[]{"A1", "A2", "A3", "A4", "A5", "A6"});
@@ -40,69 +42,9 @@ public final class KRLAxis extends KRLStruct {
     }
 
     /**
-     * Sets the value of 'A1'
-     * @param d the value to set
-     * @return this - so that method call chaining is possible 
-     */
-    public KRLAxis setA1(double d) {
-        struct.put(nodes[0], d);
-        return this;
-    }
-
-     /**
-     * Sets the value of 'A2'
-     * @param d the value to set
-     * @return this - so that method call chaining is possible 
-     */
-    public KRLAxis setA2(double d) {
-        struct.put(nodes[1], d);
-        return this;
-    }
-
-     /**
-     * Sets the value of 'A3'
-     * @param d the value to set
-     * @return this - so that method call chaining is possible 
-     */
-    public KRLAxis setA3(double d) {
-        struct.put(nodes[2], d);
-        return this;
-    }
-
-     /**
-     * Sets the value of 'A4'
-     * @param d the value to set
-     * @return this - so that method call chaining is possible 
-     */
-    public KRLAxis setA4(double d) {
-        struct.put(nodes[3], d);
-        return this;
-    }
-
-     /**
-     * Sets the value of 'A5'
-     * @param d the value to set
-     * @return this - so that method call chaining is possible 
-     */
-    public KRLAxis setA5(double d) {
-        struct.put(nodes[4], d);
-        return this;
-    }
-
-     /**
-     * Sets the value of 'A6'
-     * @param d the value to set
-     * @return this - so that method call chaining is possible 
-     */
-    public KRLAxis setA6(double d) {
-        struct.put(nodes[5], d);
-        return this;
-    }
-
-    /**
      * Initializes the values to zero
      */
-    public void initialize() {
+    private void initialize() {
         setA1(0);
         setA2(90);
         setA3(-90);
@@ -111,12 +53,80 @@ public final class KRLAxis extends KRLStruct {
         setA6(0);
     }
 
+    /**
+     * Sets the value of 'A1'
+     *
+     * @param d the value to set
+     * @return this - so that method call chaining is possible
+     */
+    public KRLAxis setA1(double d) {
+        struct.put(nodes[0], d);
+        return this;
+    }
+
+    /**
+     * Sets the value of 'A2'
+     *
+     * @param d the value to set
+     * @return this - so that method call chaining is possible
+     */
+    public KRLAxis setA2(double d) {
+        struct.put(nodes[1], d);
+        return this;
+    }
+
+    /**
+     * Sets the value of 'A3'
+     *
+     * @param d the value to set
+     * @return this - so that method call chaining is possible
+     */
+    public KRLAxis setA3(double d) {
+        struct.put(nodes[2], d);
+        return this;
+    }
+
+    /**
+     * Sets the value of 'A4'
+     *
+     * @param d the value to set
+     * @return this - so that method call chaining is possible
+     */
+    public KRLAxis setA4(double d) {
+        struct.put(nodes[3], d);
+        return this;
+    }
+
+    /**
+     * Sets the value of 'A5'
+     *
+     * @param d the value to set
+     * @return this - so that method call chaining is possible
+     */
+    public KRLAxis setA5(double d) {
+        struct.put(nodes[4], d);
+        return this;
+    }
+
+    /**
+     * Sets the value of 'A6'
+     *
+     * @param d the value to set
+     * @return this - so that method call chaining is possible
+     */
+    public KRLAxis setA6(double d) {
+        struct.put(nodes[5], d);
+        return this;
+    }
+
+    @Override
+    public void setValue(String str, String obj) {
+        struct.put(str, Double.parseDouble(obj));
+    }
+
     @Override
     public HashMap<String, Double> getValue() {
-        HashMap<String, Double> map = new HashMap<>();
-        for (String key : struct.keySet()) {
-            map.put(key, Double.parseDouble((String) struct.get(key)));
-        }
-        return map;
+        return struct;
     }
+
 }

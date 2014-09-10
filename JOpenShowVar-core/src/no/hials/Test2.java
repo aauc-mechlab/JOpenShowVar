@@ -1,4 +1,4 @@
-package no.hials.crosscom;
+package no.hials;
 
 /*
  * Copyright (c) 2014, Aalesund University College
@@ -25,49 +25,51 @@ package no.hials.crosscom;
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
-
 import java.io.IOException;
+import no.hials.crosscom.Callback;
+import no.hials.crosscom.CrossComClient;
 import no.hials.crosscom.KRL.KRLReal;
 import no.hials.crosscom.KRL.KRLVariable;
+import no.hials.crosscom.Request;
 
 /**
- * Test program to see if everything is ok. 
- * Remember to set the IP and Port to fit your own setup! 
+ * Test program to see if everything is ok. Remember to set the IP and Port to
+ * fit your own setup!
+ *
  * @author Lars Ivar Hatledal
  */
 public class Test2 {
 
     /**
      * Comparison between v0.1 and v0.2
+     *
      * @param args
      * @throws IOException
-     * @throws InterruptedException 
+     * @throws InterruptedException
      */
     public static void main(String[] args) throws IOException, InterruptedException {
-        try (CrossComClient client = new CrossComClient("158.38.141.32", 7000)) {
+        try (CrossComClient client = new CrossComClient("158.38.140.193", 7000)) {
 
             //Comparison between v0.1 and v0.2
             
-                //v0.1 read
-		Callback readRequest = client.sendRequest(new Request(0, "$OV_JOG")); //read request
-		System.out.println(readRequest);
-		
-		//v0.1 write
-		Callback writeRequest = client.sendRequest(new Request(1, "$OV_JOG", "100")); //write request
-		System.out.println(writeRequest);
-                
-                
-                //v0.2 read
-                KRLReal jog = KRLVariable.OV_JOG();
-                client.readVariable(jog);
-                System.out.println(jog);
-                
-                //v0.2 write
-                jog.setValue(10);
-                client.writeVariable(jog);
-                System.out.println(jog);
+            //v0.1 read
+            Callback readRequest = client.sendRequest(new Request(0, "$OV_JOG")); //read request
+            System.out.println(readRequest);
 
+            //v0.1 write
+            Callback writeRequest = client.sendRequest(new Request(1, "$OV_JOG", "100")); //write request
+            System.out.println(writeRequest);
+
+            
+            //v0.2 read
+            KRLReal jog = KRLVariable.OV_JOG();
+            client.readVariable(jog);
+            System.out.println(jog);
+
+            //v0.2 write
+            jog.setValue(10);
+            client.writeVariable(jog);
+            System.out.println(jog);
         }
     }
 }
