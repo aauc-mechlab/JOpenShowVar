@@ -30,8 +30,11 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -92,7 +95,11 @@ public class EditPanel extends JPanel {
 
                     }
                     sb.append("}");
-                    model.editVariable(variable.getId(), sb.toString());
+                    try {
+                        model.editVariable(variable.getId(), sb.toString());
+                    } catch (IOException ex) {
+                        Logger.getLogger(EditPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             });
 
@@ -106,7 +113,11 @@ public class EditPanel extends JPanel {
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    model.editVariable(variable.getId(), textField.getText());
+                    try {
+                        model.editVariable(variable.getId(), textField.getText());
+                    } catch (IOException ex) {
+                        Logger.getLogger(EditPanel.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                     textField.setText(null);
                 }
             });

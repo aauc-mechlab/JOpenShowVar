@@ -26,10 +26,7 @@
 package no.hials.crosscom;
 
 import java.awt.BorderLayout;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -38,7 +35,6 @@ import no.hials.crosscom.swing.BasicMenuBar;
 import no.hials.crosscom.swing.EditPanel;
 import no.hials.crosscom.swing.VarBrowser;
 import no.hials.crosscom.swing.VarModel;
-import no.hials.crosscom.networking.CrossComClient;
 
 /**
  * Main class

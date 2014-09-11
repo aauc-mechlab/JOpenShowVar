@@ -41,9 +41,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Timer;
 import static no.hials.crosscom.ApplicationLauncher.FILELOCATION_VAR_LIST;
-import no.hials.crosscom.networking.Callback;
-import no.hials.crosscom.networking.CrossComClient;
-import no.hials.crosscom.networking.Request;
+import no.hials.crosscom.Callback;
+import no.hials.crosscom.CrossComClient;
+import no.hials.crosscom.Request;
 import no.hials.crosscom.variables.Variable;
 
 /**
@@ -60,7 +60,11 @@ public final class VarModel  {
     public VarModel(CrossComClient client) {
         this.client = client;
         this.timer = new Timer(250, (ActionEvent e) -> {
-            update();
+            try {
+                update();
+            } catch (IOException ex) {
+                Logger.getLogger(VarModel.class.getName()).log(Level.SEVERE, null, ex);
+            }
         });
         timer.start();
     }
@@ -75,17 +79,13 @@ public final class VarModel  {
             Callback callback = client.sendRequest(request);
             Variable variable = Variable.parseVariable(callback);
             variables.add(variable);
-        } catch (IOException | NumberFormatException ex) {
+        } catch (NumberFormatException ex) {
             Logger.getLogger(VarModel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void editVariable(int id, String value) {
-        try {
-            client.sendRequest(new Request(id, getByID(id).getName(), value));
-        } catch (IOException ex) {
-            Logger.getLogger(VarModel.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void editVariable(int id, String value) throws IOException {
+        client.sendRequest(new Request(id, getByID(id).getName(), value));
     }
 
     public EventList<Variable> getVariables() {
@@ -95,23 +95,19 @@ public final class VarModel  {
     /**
      * Updates the variable view
      */
-    public void update() {
+    public void update() throws IOException {
         for (Variable var : variables) {
             Request request = new Request(var.getId(), var.getName());
-            try {
-                Callback callback = client.sendRequest(request);
-                int id = callback.getId();
-                Variable variable = callback.getVariable();
-                Variable oldVar = getByID(id);
-                if (oldVar != null) {
-                    oldVar.update(variable.getValue(), callback.getReadTime());
-                    int indexOf = variables.indexOf(oldVar);
-                    variables.set(indexOf, oldVar);
-                } else {
-                    variables.add(id, variable);
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(VarModel.class.getName()).log(Level.SEVERE, null, ex);
+            Callback callback = client.sendRequest(request);
+            int id = callback.getId();
+            Variable variable = callback.getVariable();
+            Variable oldVar = getByID(id);
+            if (oldVar != null) {
+                oldVar.update(variable.getValue(), callback.getReadTime());
+                int indexOf = variables.indexOf(oldVar);
+                variables.set(indexOf, oldVar);
+            } else {
+                variables.add(id, variable);
             }
         }
     }
