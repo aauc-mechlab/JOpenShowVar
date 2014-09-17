@@ -260,6 +260,20 @@ public final class KRLE6Pos extends KRLStruct {
         return this;
     }
 
+    /**
+     * Get a double array representation of this object
+     *
+     * @return a new double array with the values contained in this struct
+     */
+    public double[] asArray() {
+
+        double[] arr = new double[nodes.length];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = struct.get(nodes[i]);
+        }
+        return arr;
+    }
+
     @Override
     public void setValue(String str, String obj) {
         struct.put(str, Double.parseDouble(obj));

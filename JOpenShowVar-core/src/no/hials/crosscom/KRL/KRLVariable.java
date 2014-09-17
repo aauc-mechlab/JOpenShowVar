@@ -199,18 +199,34 @@ public abstract class KRLVariable {
     protected abstract void setValueFromString(String strValue);
 
 
+    /**
+     * Convenience method for getting the $OV_JOG variable
+     * @return the OV_JOG variable
+     */
     public static KRLReal OV_JOG() {
         return new KRLReal("$OV_JOG");
     }
 
+    /**
+     * Convenience method for getting the $OV_PRO variable
+     * @return the OV_PRO variable
+     */
     public static KRLReal OV_PRO() {
         return new KRLReal("$OV_PRO");
     }
 
+    /**
+     * Convenience method for getting the $AXIS_ACT variable
+     * @return the AXIS_ACT variable
+     */
     public static KRLE6Axis AXIS_ACT() {
         return new KRLE6Axis("$AXIS_ACT");
     }
 
+    /**
+     * Convenience method for getting the $POS_ACT variable
+     * @return the POS_ACT variable
+     */
     public static KRLReal POS_ACT() {
         return new KRLReal("$POS_ACT");
     }

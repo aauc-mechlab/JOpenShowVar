@@ -42,7 +42,7 @@ public final class KRLFrame extends KRLStruct {
     }
 
     /**
-     * Initializes the values to zero
+     * Initializes the values
      */
     private void inititialize() {
         setX(0);
@@ -145,6 +145,20 @@ public final class KRLFrame extends KRLStruct {
     public KRLFrame setC(double d) {
         struct.put(nodes[5], d);
         return this;
+    }
+
+    /**
+     * Get a double array representation of this object
+     *
+     * @return a new double array with the values contained in this struct
+     */
+    public double[] asArray() {
+
+        double[] arr = new double[nodes.length];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = struct.get(nodes[i]);
+        }
+        return arr;
     }
 
     @Override

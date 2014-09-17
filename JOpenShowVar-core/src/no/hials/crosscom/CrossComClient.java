@@ -31,7 +31,9 @@ import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import no.hials.crosscom.KRL.KRLE6Axis;
 
 /**
@@ -43,11 +45,124 @@ public final class CrossComClient extends Socket {
 
     BufferedInputStream bis = new BufferedInputStream(getInputStream());
     BufferedOutputStream bos = new BufferedOutputStream(getOutputStream());
-    
+
     private final KRLE6Axis axis_act = new KRLE6Axis("$AXIS_ACT");
 
     public CrossComClient(String host, int port) throws UnknownHostException, IOException {
         super(host, port);
+    }
+
+    public String simpleRead(String name) throws IOException {
+        int id = 99; //just some number
+        byte[] cmd = name.getBytes();
+        List<Byte> header = new ArrayList<>();
+        List<Byte> block = new ArrayList<>();
+
+        byte hbyte = (byte) ((cmd.length >> 8) & 0xff00);
+        byte lbyte = (byte) (cmd.length & 0x00ff);
+
+        int index = 0;
+        block.add(index++, (byte) 0);
+        block.add(index++, hbyte);
+        block.add(index++, lbyte);
+        for (int i = 0; i < cmd.length; i++) {
+            block.add(index++, cmd[i]);
+        }
+        hbyte = (byte) ((block.size() >> 8) & 0xff00);
+        lbyte = (byte) (block.size() & 0x00ff);
+
+        byte hbytemsg = (byte) ((id >> 8) & 0xff00);
+        byte lbytemsg = (byte) (id & 0x00ff);
+
+        index = 0;
+        header.add(index++, hbytemsg);
+        header.add(index++, lbytemsg);
+        header.add(index++, hbyte);
+        header.add(index++, lbyte);
+
+        block.addAll(0, header);
+
+        for (byte b : block) {
+            bos.write(b);
+        }
+        bos.flush();
+
+        long t0 = System.nanoTime();
+        byte[] recheader = new byte[7];
+        bis.read(recheader);
+
+        byte[] recblock = new byte[getInt(recheader, 2)];
+        bis.read(recblock);
+
+        byte[] data = new byte[recheader.length + recblock.length];
+        System.arraycopy(recheader, 0, data, 0, recheader.length);
+        System.arraycopy(recblock, 0, data, recheader.length, recblock.length);
+
+        long readTime = (System.nanoTime() - t0) / 1000000;
+
+        return name + " #read time=" + readTime + "ms  #value=" + new String(Arrays.copyOfRange(data, 7, data.length)).trim();
+    }
+
+    public String simpleWrite(String name, String val) throws IOException {
+        int id = 99; //just some number
+        byte[] cmd = name.getBytes();
+        byte[] value = val.getBytes();
+        List<Byte> header = new ArrayList<>();
+        List<Byte> block = new ArrayList<>();
+
+        byte hbyte = (byte) ((cmd.length >> 8) & 0xff00);
+        byte lbyte = (byte) (cmd.length & 0x00ff);
+
+        int index = 0;
+        block.add(index++, (byte) 1);
+        block.add(index++, hbyte);
+        block.add(index++, lbyte);
+        for (int i = 0; i < cmd.length; i++) {
+            block.add(index++, cmd[i]);
+        }
+
+        hbyte = (byte) ((value.length >> 8) & 0xff00);
+        lbyte = (byte) (value.length & 0x00ff);
+
+        block.add(index++, hbyte);
+        block.add(index++, lbyte);
+        for (int i = 0; i < value.length; i++) {
+            block.add(index++, value[i]);
+        }
+
+        hbyte = (byte) ((block.size() >> 8) & 0xff00);
+        lbyte = (byte) (block.size() & 0x00ff);
+
+        byte hbytemsg = (byte) ((id >> 8) & 0xff00);
+        byte lbytemsg = (byte) (id & 0x00ff);
+
+        index = 0;
+        header.add(index++, hbytemsg);
+        header.add(index++, lbytemsg);
+        header.add(index++, hbyte);
+        header.add(index++, lbyte);
+
+        block.addAll(0, header);
+
+        for (byte b : block) {
+            bos.write(b);
+        }
+        bos.flush();
+
+        long t0 = System.nanoTime();
+        byte[] recheader = new byte[7];
+        bis.read(recheader);
+
+        byte[] recblock = new byte[getInt(recheader, 2)];
+        bis.read(recblock);
+
+        byte[] data = new byte[recheader.length + recblock.length];
+        System.arraycopy(recheader, 0, data, 0, recheader.length);
+        System.arraycopy(recblock, 0, data, recheader.length, recblock.length);
+
+        long readTime = (System.nanoTime() - t0) / 1000000;
+
+        return name + " #read time=" + readTime + "ms  #value=" + new String(Arrays.copyOfRange(data, 7, data.length)).trim();
     }
 
     /**
@@ -67,15 +182,23 @@ public final class CrossComClient extends Socket {
     }
 
     /**
-     * convenience method for reading the current joint angles of the robot
+     * Convenience method for reading the current joint angles of the robot
+     *
      * @return the current joint angles of the robot 6 angles and 6
-     * @throws IOException 
+     * @throws IOException
      */
     public double[] readJointAngles() throws IOException {
         readVariable(axis_act);
         return Arrays.copyOfRange(axis_act.asArray(), 0, 6);
     }
 
+    /**
+     * Convenience method for reading the joint torques
+     *
+     * @return the joint torques of the robot, or a zero filled array if
+     * something bad happens
+     * @throws IOException
+     */
     public double[] readJointTorques() throws IOException {
         double[] jointTorques = new double[6];
         try {
@@ -92,9 +215,11 @@ public final class CrossComClient extends Socket {
     }
 
     /**
-     * Updates var with the values retrieved from variable with the same name in the controller.
+     * Updates var with the values retrieved from variable with the same name in
+     * the controller.
+     *
      * @param var the KRLVariable to read
-     * @throws IOException 
+     * @throws IOException
      */
     public void readVariable(KRLVariable var) throws IOException {
         for (byte b : var.getReadCommand()) {
@@ -113,16 +238,18 @@ public final class CrossComClient extends Socket {
         System.arraycopy(block, 0, data, header.length, block.length);
 
         long readTime = (System.nanoTime() - t0);
-        
+
         int id = getInt(data, 0);
-        String strValue = new String(Arrays.copyOfRange(data, 7, data.length)).trim(); 
+        String strValue = new String(Arrays.copyOfRange(data, 7, data.length)).trim();
         var.update(id, strValue, readTime);
     }
-    
+
     /**
-     * Writes the values in var to the variable with the same name in the controller
+     * Writes the values in var to the variable with the same name in the
+     * controller
+     *
      * @param var the KRLVariable to write
-     * @throws IOException 
+     * @throws IOException
      */
     public void writeVariable(KRLVariable var) throws IOException {
         for (byte b : var.getWriteCommand()) {
@@ -141,18 +268,19 @@ public final class CrossComClient extends Socket {
         System.arraycopy(block, 0, data, header.length, block.length);
 
         long readTime = (System.nanoTime() - t0);
-        
+
         int id = getInt(data, 0);
-        String strValue = new String(Arrays.copyOfRange(data, 7, data.length)).trim(); 
-        var.update(id,  strValue, readTime);
-        
+        String strValue = new String(Arrays.copyOfRange(data, 7, data.length)).trim();
+        var.update(id, strValue, readTime);
+
     }
 
     /**
      * Called internally by sendRequest
+     *
      * @param variable the varibale name
      * @return a callback with the values return by the controller
-     * @throws IOException 
+     * @throws IOException
      */
     private Callback getCallback(String variable) throws IOException {
         long t0 = System.nanoTime();

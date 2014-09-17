@@ -43,7 +43,7 @@ import no.hials.crosscom.KRL.KRLVariable;
 public class Test {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        try (CrossComClient client = new CrossComClient("158.38.140.193", 7000)) {
+        try (CrossComClient client = new CrossComClient("158.38.141.4", 7000)) {
 
             KRLPos pos = new KRLPos("MYPOS").setX(2).setY(1);  //MYPOS is defined manually in $config.dat
             client.writeVariable(pos);
@@ -80,6 +80,7 @@ public class Test {
             System.out.println(mode);
             
             System.out.println(Arrays.toString(client.readJointAngles()));
+
             
         }
     }

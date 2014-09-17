@@ -64,7 +64,7 @@ public class KRLE6Axis extends KRLStruct {
      *
      * @param values the new values
      */
-    public void setA1ToA6(double[] values) {
+    public void setA1ToA6(double ... values) {
         if (values.length != 6) {
             throw new IllegalArgumentException("The number of values should be exatly 6!");
         }
@@ -81,7 +81,7 @@ public class KRLE6Axis extends KRLStruct {
      *
      * @param values the new values
      */
-    public void setE1ToE6(double[] values) {
+    public void setE1ToE6(double ... values) {
         if (values.length != 6) {
             throw new IllegalArgumentException("The number of values should be exatly 6!");
         }
@@ -225,31 +225,23 @@ public class KRLE6Axis extends KRLStruct {
         return this;
     }
 
+     /**
+     * Get a double array representation of this object
+     *
+     * @return a new double array with the values contained in this struct
+     */
     public double[] asArray() {
-        return new double[]{
-            struct.get("A1"),
-            struct.get("A2"),
-            struct.get("A3"),
-            struct.get("A4"),
-            struct.get("A5"),
-            struct.get("A6"),
-            struct.get("E1"),
-            struct.get("E2"),
-            struct.get("E3"),
-            struct.get("E4"),
-            struct.get("E5"),
-            struct.get("E6")
-        };
+
+        double[] arr = new double[nodes.length];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = struct.get(nodes[i]);
+        }
+        return arr;
     }
 
     @Override
     public HashMap<String, Double> getValue() {
         return struct;
-//        HashMap<String, Double> map = new HashMap<>();
-//        for (String key : struct.keySet()) {
-//            map.put(key, Double.parseDouble((String) struct.get(key)));
-//        }
-//        return map;
     }
 
     @Override

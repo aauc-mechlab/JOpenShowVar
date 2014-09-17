@@ -48,7 +48,7 @@ public class Test2 {
      * @throws InterruptedException
      */
     public static void main(String[] args) throws IOException, InterruptedException {
-        try (CrossComClient client = new CrossComClient("158.38.140.193", 7000)) {
+        try (CrossComClient client = new CrossComClient("158.38.141.4", 7000)) {
 
             //Comparison between v0.1 and v0.2
             

@@ -46,8 +46,16 @@ public abstract class KRLStruct extends KRLVariable {
 
     public abstract void setValue(String str, String obj);
 
+    /**
+     * The nodes 
+     * @return the name of the variables that this struct contains
+     */
+    public String[] getNodes() {
+        return nodes;
+    }
+
     @Override
-    protected void setValueFromString(String strValue)  {
+    protected void setValueFromString(String strValue) {
         String substring;
         if (strValue.contains(":")) {
             String[] split = strValue.split(":");

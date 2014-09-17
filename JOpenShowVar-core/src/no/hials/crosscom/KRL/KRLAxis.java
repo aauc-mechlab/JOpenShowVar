@@ -42,7 +42,7 @@ public final class KRLAxis extends KRLStruct {
     }
 
     /**
-     * Initializes the values to zero
+     * Initializes the values
      */
     private void initialize() {
         setA1(0);
@@ -51,6 +51,24 @@ public final class KRLAxis extends KRLStruct {
         setA4(0);
         setA5(0);
         setA6(0);
+    }
+    
+    
+     /**
+     * Sets A1 to A6
+     *
+     * @param values the new values
+     */
+    public void setA1ToA6(double ... values) {
+        if (values.length != 6) {
+            throw new IllegalArgumentException("The number of values should be exatly 6!");
+        }
+        setA1(values[0]);
+        setA2(values[1]);
+        setA3(values[2]);
+        setA4(values[3]);
+        setA5(values[4]);
+        setA6(values[5]);
     }
 
     /**
@@ -117,6 +135,20 @@ public final class KRLAxis extends KRLStruct {
     public KRLAxis setA6(double d) {
         struct.put(nodes[5], d);
         return this;
+    }
+    
+     /**
+     * Get a double array representation of this object
+     *
+     * @return a new double array with the values contained in this struct
+     */
+    public double[] asArray() {
+
+        double[] arr = new double[nodes.length];
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = struct.get(nodes[i]);
+        }
+        return arr;
     }
 
     @Override
