@@ -39,7 +39,7 @@ import no.hials.crosscom.Request;
 public class ConsoleLaunch {
 
     /**
-     * @param args the command line arguments args[0] -> IP address args[1] ->
+     * @param args the command line arguments args[0] = IP address args[1] =
      * port
      * @throws java.io.IOException
      * @throws java.lang.ClassNotFoundException

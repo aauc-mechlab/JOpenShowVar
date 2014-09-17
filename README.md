@@ -25,6 +25,9 @@ Changelog
 * Added Enum datatype support 
 * Some internal code clean-up 
  
+ 0.2.1 -> 0.2.2
+ * Added simpleRead and simpleWrite
+ * Some consistency changes for the KRLStruct classes
 
 
 Usage
@@ -67,7 +70,7 @@ public class Example {
 ```
 
 
-Example code v0.2.1
+Example code v0.2.2
 ===========
 ```java
 public class Test {
@@ -110,6 +113,10 @@ public class Test {
             System.out.println(mode);
             
             System.out.println(Arrays.toString(client.readJointAngles()));
+			
+			System.out.println(client.simpleRead("$OV_JOG"));
+			System.out.println(client.simpleWrite("$OV_JOG", "90"));
+			
             
         }
     }
