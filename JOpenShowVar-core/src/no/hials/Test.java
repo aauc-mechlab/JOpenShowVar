@@ -28,33 +28,42 @@ package no.hials;
 import java.io.IOException;
 import java.util.Arrays;
 import no.hials.crosscom.CrossComClient;
+import no.hials.crosscom.KRL.structs.KRLAxis;
 import no.hials.crosscom.KRL.KRLBool;
-import no.hials.crosscom.KRL.KRLE6Axis;
+import no.hials.crosscom.KRL.structs.KRLE6Axis;
 import no.hials.crosscom.KRL.KRLEnum;
-import no.hials.crosscom.KRL.KRLPos;
+import no.hials.crosscom.KRL.structs.KRLPos;
 import no.hials.crosscom.KRL.KRLReal;
 import no.hials.crosscom.KRL.KRLVariable;
 
 /**
- * Test program to see if everything is ok. 
- * Remember to set the IP and Port to fit your own setup! 
+ * Test program to see if everything is ok. Remember to set the IP and Port to
+ * fit your own setup!
+ *
  * @author Lars Ivar Hatledal
  */
 public class Test {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        try (CrossComClient client = new CrossComClient("158.38.141.4", 7000)) {
+        try (CrossComClient client = new CrossComClient("158.38.85.126", 7000)) {
 
-            KRLPos pos = new KRLPos("MYPOS").setX(2).setY(1);  //MYPOS is defined manually in $config.dat
+            KRLPos pos = new KRLPos("MYPOS");
+            pos.setX(2);
+            pos.setY(1);  //MYPOS is defined manually in $config.dat
             client.writeVariable(pos);
             System.out.println(pos);
 
             client.readVariable(pos);
             System.out.println(pos);
 
+            KRLAxis axis = new KRLAxis("MYAXIS");
+            client.readVariable(axis);
+            System.out.println(axis);
+
             KRLE6Axis axisAct = KRLVariable.AXIS_ACT(); // the same as new KRLE6Axis($AXIS_ACT)
             client.readVariable(axisAct);
             System.out.println(axisAct);
+            System.out.println(Arrays.toString(axisAct.asArray()));
 
             KRLReal jog = KRLVariable.OV_JOG(); // the same as new KRLReal($OV_JOG)
             client.readVariable(jog);
@@ -64,9 +73,9 @@ public class Test {
             client.readVariable(pro);
             System.out.println(pro);
 
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 25; i++) {
                 pro.setValue(i);
-               client.writeVariable(pro);
+                client.writeVariable(pro);
                 System.out.println(pro);
                 Thread.sleep(10);
             }
@@ -74,14 +83,13 @@ public class Test {
             KRLBool out1 = new KRLBool("$OUT[1]");
             client.readVariable(out1);
             System.out.println(out1);
-            
+
             KRLEnum mode = new KRLEnum("$MODE_OP");
             client.readVariable(mode);
             System.out.println(mode);
-            
+
             System.out.println(Arrays.toString(client.readJointAngles()));
 
-            
         }
     }
 }

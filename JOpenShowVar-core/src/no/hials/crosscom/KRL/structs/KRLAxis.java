@@ -23,7 +23,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package no.hials.crosscom.KRL;
+package no.hials.crosscom.KRL.structs;
 
 import java.util.HashMap;
 
@@ -32,34 +32,27 @@ import java.util.HashMap;
  *
  * @author Lars Ivar Hatledal
  */
-public final class KRLAxis extends KRLStruct {
+public class KRLAxis extends KRLStruct {
 
-    private final HashMap<String, Double> struct = new HashMap<>();
+    protected final HashMap<String, Double> struct = new HashMap<>();
 
     public KRLAxis(String name) {
-        super(name, new String[]{"A1", "A2", "A3", "A4", "A5", "A6"});
-        initialize();
+        this(name, new String[]{"A1", "A2", "A3", "A4", "A5", "A6"});
+    }
+
+    protected KRLAxis(String name, String[] nodes) {
+        super(name, nodes);
+        for (String str : nodes) {
+            struct.put(str, 0d);
+        }
     }
 
     /**
-     * Initializes the values
-     */
-    private void initialize() {
-        setA1(0);
-        setA2(90);
-        setA3(-90);
-        setA4(0);
-        setA5(0);
-        setA6(0);
-    }
-    
-    
-     /**
      * Sets A1 to A6
      *
      * @param values the new values
      */
-    public void setA1ToA6(double ... values) {
+    public void setA1ToA6(double... values) {
         if (values.length != 6) {
             throw new IllegalArgumentException("The number of values should be exatly 6!");
         }
@@ -75,80 +68,72 @@ public final class KRLAxis extends KRLStruct {
      * Sets the value of 'A1'
      *
      * @param d the value to set
-     * @return this - so that method call chaining is possible
      */
-    public KRLAxis setA1(double d) {
-        struct.put(nodes[0], d);
-        return this;
+    public void setA1(double d) {
+        struct.put(getNodes()[0], d);
     }
 
     /**
      * Sets the value of 'A2'
      *
      * @param d the value to set
-     * @return this - so that method call chaining is possible
      */
-    public KRLAxis setA2(double d) {
-        struct.put(nodes[1], d);
-        return this;
+    public void setA2(double d) {
+        struct.put(getNodes()[1], d);
     }
 
     /**
      * Sets the value of 'A3'
      *
      * @param d the value to set
-     * @return this - so that method call chaining is possible
      */
-    public KRLAxis setA3(double d) {
-        struct.put(nodes[2], d);
-        return this;
+    public void setA3(double d) {
+        struct.put(getNodes()[2], d);
     }
 
     /**
      * Sets the value of 'A4'
      *
      * @param d the value to set
-     * @return this - so that method call chaining is possible
      */
-    public KRLAxis setA4(double d) {
-        struct.put(nodes[3], d);
-        return this;
+    public void setA4(double d) {
+        struct.put(getNodes()[3], d);
     }
 
     /**
      * Sets the value of 'A5'
      *
      * @param d the value to set
-     * @return this - so that method call chaining is possible
      */
-    public KRLAxis setA5(double d) {
-        struct.put(nodes[4], d);
-        return this;
+    public void setA5(double d) {
+        struct.put(getNodes()[4], d);
     }
 
     /**
      * Sets the value of 'A6'
      *
      * @param d the value to set
-     * @return this - so that method call chaining is possible
      */
-    public KRLAxis setA6(double d) {
-        struct.put(nodes[5], d);
-        return this;
+    public void setA6(double d) {
+        struct.put(getNodes()[5], d);
     }
-    
-     /**
+
+    /**
      * Get a double array representation of this object
      *
      * @return a new double array with the values contained in this struct
      */
     public double[] asArray() {
 
-        double[] arr = new double[nodes.length];
+        double[] arr = new double[getNodes().length];
         for (int i = 0; i < arr.length; i++) {
-            arr[i] = struct.get(nodes[i]);
+            arr[i] = struct.get(getNodes()[i]);
         }
         return arr;
+    }
+
+    public double[] asArrayA1ToA6() {
+        return new double[]{struct.get("A1"), struct.get("A2"), struct.get("A3"), struct.get("A4"), struct.get("A5"), struct.get("A6")};
     }
 
     @Override

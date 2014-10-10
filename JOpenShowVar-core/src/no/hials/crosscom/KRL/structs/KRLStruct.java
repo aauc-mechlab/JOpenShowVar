@@ -23,9 +23,15 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package no.hials.crosscom.KRL;
+package no.hials.crosscom.KRL.structs;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+import no.hials.crosscom.KRL.KRLVariable;
 
 /**
  * Represents a Struct variable from the KRL language
@@ -34,12 +40,16 @@ import java.util.HashMap;
  */
 public abstract class KRLStruct extends KRLVariable {
 
-    protected String[] nodes;
+    private final Set<String> nodes = new HashSet<>();
 
     public KRLStruct(String name, String[] nodes) {
-        super(name);
-        this.nodes = nodes;
+        this(name, Arrays.asList(nodes));
     }
+    
+     public KRLStruct(String name, Collection<String> nodes) {
+          super(name);
+          this.nodes.addAll((nodes));
+     }
 
     @Override
     public abstract HashMap getValue();
@@ -51,7 +61,7 @@ public abstract class KRLStruct extends KRLVariable {
      * @return the name of the variables that this struct contains
      */
     public String[] getNodes() {
-        return nodes;
+        return nodes.toArray(new String[nodes.size()]);
     }
 
     @Override
@@ -78,15 +88,18 @@ public abstract class KRLStruct extends KRLVariable {
         HashMap map = getValue();
         StringBuilder sb = new StringBuilder();
         sb.append("{");
-        for (int i = 0; i < nodes.length; i++) {
-            if (map.containsKey(nodes[i])) {
-                Object get = map.remove(nodes[i]);
-                sb.append(nodes[i]).append(" ").append(get);
+        int i = 0;
+        for (Iterator<String> it = nodes.iterator(); it.hasNext();i++) {
+            String str = it.next();
+             if (map.containsKey(str)) {
+                Object get = map.remove(str);
+                sb.append(str).append(" ").append(get);
                 if (!map.isEmpty() && i != map.size()) {
                     sb.append(", ");
                 }
             }
         }
+ 
         sb.append("}");
         return sb.toString();
     }

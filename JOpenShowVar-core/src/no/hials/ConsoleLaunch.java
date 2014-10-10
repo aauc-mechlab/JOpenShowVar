@@ -27,12 +27,10 @@ package no.hials;
 
 import java.io.IOException;
 import java.util.Scanner;
-import no.hials.crosscom.Callback;
 import no.hials.crosscom.CrossComClient;
-import no.hials.crosscom.Request;
 
 /**
- * Simple console application for interfacing with KUKA robots 
+ * Simple console application for interfacing with KUKA robots
  *
  * @author Lars Ivar Hatledal
  */
@@ -41,12 +39,10 @@ public class ConsoleLaunch {
     /**
      * @param args the command line arguments args[0] = IP address args[1] =
      * port
-     * @throws java.io.IOException
-     * @throws java.lang.ClassNotFoundException
+     * @throws java.io.IOException on IOe error
      */
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-        
-        
+    public static void main(String[] args) throws IOException {
+
         if (args.length != 2) {
             System.out.println("Error! Both IP and port must be provided as input arguments!");
             System.out.println("Terminating..");
@@ -62,7 +58,7 @@ public class ConsoleLaunch {
             System.out.println("Terminating..");
             System.exit(1);
         }
-        
+
         CrossComClient client = null;
         try {
             client = new CrossComClient(address, port);
@@ -104,17 +100,14 @@ public class ConsoleLaunch {
                 String[] split = input.split(" ");
                 if (split.length == 1) {
                     if (!split[0].equals("")) {
-                        Callback response = client.sendRequest(new Request(0, split[0]));
-                        System.out.println("Got: " + response);
+                        System.out.println("Got: " + client.simpleRead(split[0]));
                     } else {
                         System.out.println("Error: Empty string!");
                     }
                 } else if (split.length == 2) {
-                    Callback response = client.sendRequest(new Request(0, split[0], split[1]));
-                    System.out.println("Got: " + response);
+                    System.out.println("Got: " + client.simpleWrite(split[0], split[1]));
                 } else {
-                    Callback response = client.sendRequest(new Request(0, split[0], input.replaceFirst(split[0], "").trim()));
-                    System.out.println("Got: " + response);
+                    System.out.println("Got: " + client.simpleWrite(split[0], input.replaceFirst(split[0], "").trim()));
                 }
             }
         }

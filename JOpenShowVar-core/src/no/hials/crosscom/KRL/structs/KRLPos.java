@@ -23,50 +23,58 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package no.hials;
+package no.hials.crosscom.KRL.structs;
 
-import java.io.IOException;
-import no.hials.crosscom.Callback;
-import no.hials.crosscom.CrossComClient;
-import no.hials.crosscom.KRL.KRLReal;
-import no.hials.crosscom.KRL.KRLVariable;
-import no.hials.crosscom.Request;
+import no.hials.crosscom.KRL.structs.KRLFrame;
 
 /**
- * Test program to see if everything is ok. Remember to set the IP and Port to
- * fit your own setup!
+ * Represents a Real variable from the KRL language
  *
  * @author Lars Ivar Hatledal
  */
-public class Test2 {
+public class KRLPos extends KRLFrame {
+
+    public KRLPos(String name) {
+        this(name, new String[]{"X", "Y", "Z", "A", "B", "C", "S", "T"});
+    }
+
+    protected KRLPos(String name, String[] nodes) {
+        super(name, nodes);
+    }
 
     /**
-     * Comparison between v0.1 and v0.2
+     * Getter for S
      *
-     * @param args none
-     * @throws IOException on IO error
+     * @return the value
      */
-    public static void main(String[] args) throws IOException {
-        try (CrossComClient client = new CrossComClient("158.38.85.126", 7000)) {
+    public double getS() {
+        return struct.get("S");
+    }
 
-            //Comparison between v0.1 and v0.2
-            //v0.1 read
-            Callback readRequest = client.sendRequest(new Request(0, "$OV_JOG")); //read request
-            System.out.println(readRequest);
+    /**
+     * Getter for T
+     *
+     * @return the value
+     */
+    public double getT() {
+        return struct.get("T");
+    }
 
-            //v0.1 write
-            Callback writeRequest = client.sendRequest(new Request(1, "$OV_JOG", "50")); //write request
-            System.out.println(writeRequest);
+    /**
+     * Sets the value of 'S'
+     *
+     * @param d the value to set
+     */
+    public void setS(double d) {
+        struct.put(getNodes()[6], d);
+    }
 
-            //v0.2 read
-            KRLReal jog = KRLVariable.OV_JOG();
-            client.readVariable(jog);
-            System.out.println(jog);
-
-            //v0.2 write
-            jog.setValue(10);
-            client.writeVariable(jog);
-            System.out.println(jog);
-        }
+    /**
+     * Sets the value of 'T'
+     *
+     * @param d the value to set
+     */
+    public void setT(double d) {
+        struct.put(getNodes()[7], d);
     }
 }

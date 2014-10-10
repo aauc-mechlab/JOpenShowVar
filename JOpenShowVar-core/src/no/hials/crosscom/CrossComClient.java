@@ -34,7 +34,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import no.hials.crosscom.KRL.KRLE6Axis;
+import no.hials.crosscom.KRL.structs.KRLE6Axis;
 
 /**
  * The Client used to communicate with KukaVarProxy
@@ -52,6 +52,12 @@ public final class CrossComClient extends Socket {
         super(host, port);
     }
 
+    /**
+     * Simple read. No parsing of the return is done
+     * @param name the name of the variable to read
+     * @return the string we get from KUKAVARPROXY 
+     * @throws IOException if something bad happens
+     */
     public String simpleRead(String name) throws IOException {
         int id = 99; //just some number
         byte[] cmd = name.getBytes();
@@ -103,6 +109,13 @@ public final class CrossComClient extends Socket {
         return name + " #read time=" + readTime + "ms  #value=" + new String(Arrays.copyOfRange(data, 7, data.length)).trim();
     }
 
+    /**
+     * Simple write. No parsing of the return is done
+     * @param name the name of the variable to write to
+     * @param val the value to write
+     * @return the string we get from KUKAVARPROXY 
+     * @throws IOException if something bad happens
+     */
     public String simpleWrite(String name, String val) throws IOException {
         int id = 99; //just some number
         byte[] cmd = name.getBytes();
@@ -169,8 +182,8 @@ public final class CrossComClient extends Socket {
      * Sends a request to the KUKA robot
      *
      * @param request the request to send
+     * @throws IOException on IO error
      * @return a Callback from the robot with an updated variable value
-     * @throws IOException
      */
     @Deprecated
     public Callback sendRequest(Request request) throws IOException {
@@ -184,8 +197,8 @@ public final class CrossComClient extends Socket {
     /**
      * Convenience method for reading the current joint angles of the robot
      *
+     * @throws IOException on IO error
      * @return the current joint angles of the robot 6 angles and 6
-     * @throws IOException
      */
     public double[] readJointAngles() throws IOException {
         readVariable(axis_act);
@@ -195,9 +208,9 @@ public final class CrossComClient extends Socket {
     /**
      * Convenience method for reading the joint torques
      *
+     * @throws IOException on IO error
      * @return the joint torques of the robot, or a zero filled array if
      * something bad happens
-     * @throws IOException
      */
     public double[] readJointTorques() throws IOException {
         double[] jointTorques = new double[6];
@@ -219,7 +232,7 @@ public final class CrossComClient extends Socket {
      * the controller.
      *
      * @param var the KRLVariable to read
-     * @throws IOException
+     * @throws IOException on IO error
      */
     public void readVariable(KRLVariable var) throws IOException {
         for (byte b : var.getReadCommand()) {
@@ -249,7 +262,7 @@ public final class CrossComClient extends Socket {
      * controller
      *
      * @param var the KRLVariable to write
-     * @throws IOException
+     * @throws IOException on IOerror
      */
     public void writeVariable(KRLVariable var) throws IOException {
         for (byte b : var.getWriteCommand()) {

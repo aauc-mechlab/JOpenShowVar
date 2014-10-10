@@ -63,7 +63,7 @@ public abstract class Variable<E> implements Comparable<Variable<E>> {
     /**
      * Get the datatype: 'INT', 'REAL', 'BOOL', etc.
      *
-     * @return
+     * @return the dataType
      */
     public String getDataType() {
         return dataType;
@@ -99,7 +99,7 @@ public abstract class Variable<E> implements Comparable<Variable<E>> {
     /**
      * Sets the value of the variable
      *
-     * @param value
+     * @param value the value to set
      */
     protected void setValue(E value) {
         this.value = value;
@@ -137,7 +137,7 @@ public abstract class Variable<E> implements Comparable<Variable<E>> {
      *
      * @param callback the Callback from the robot
      * @return the JOpenShowVar Variable
-     * @throws NumberFormatException
+     * @throws NumberFormatException on parsing error
      */
     public static Variable parseVariable(Callback callback) throws NumberFormatException {
         String variable = callback.getVariableName();

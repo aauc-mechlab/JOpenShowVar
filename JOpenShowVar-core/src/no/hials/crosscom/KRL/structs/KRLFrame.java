@@ -23,7 +23,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package no.hials.crosscom.KRL;
+package no.hials.crosscom.KRL.structs;
 
 import java.util.HashMap;
 
@@ -32,25 +32,67 @@ import java.util.HashMap;
  *
  * @author Lars Ivar Hatledal
  */
-public final class KRLFrame extends KRLStruct {
+public class KRLFrame extends KRLStruct {
 
-    private final HashMap<String, Double> struct = new HashMap<>();
+    protected final HashMap<String, Double> struct = new HashMap<>();
 
     public KRLFrame(String name) {
-        super(name, new String[]{"X", "Y", "Z", "A", "B", "C"});
-        inititialize();
+        this(name, new String[]{"X", "Y", "Z", "A", "B", "C"}); 
+    }
+
+    protected KRLFrame(String name, String[] nodes) {
+        super(name, nodes);
+        for (String str : nodes) {
+            struct.put(str, 0d);
+        }
     }
 
     /**
-     * Initializes the values
+     * Getter for X
+     * @return the value
      */
-    private void inititialize() {
-        setX(0);
-        setY(0);
-        setZ(0);
-        setA(0);
-        setB(0);
-        setC(0);
+    public double getX() {
+        return struct.get("X");
+    }
+
+    /**
+     * Getter for Y
+     * @return the value
+     */
+    public double getY() {
+        return struct.get("Y");
+    }
+
+    /**
+     * Getter for Z
+     * @return the value
+     */
+    public double getZ() {
+        return struct.get("Z");
+    }
+
+    /**
+     * Getter for A
+     * @return the value
+     */
+    public double getA() {
+        return struct.get("A");
+    }
+
+    /**
+     * Getter for B
+     * @return the value
+     */
+    public double getB() {
+        return struct.get("B");
+    }
+
+    /**
+     * Getter for C
+     * @return the value
+     */
+    public double getC() {
+        return struct.get("C");
     }
 
     /**
@@ -88,7 +130,7 @@ public final class KRLFrame extends KRLStruct {
      * @return this - so that method call chaining is possible
      */
     public KRLFrame setX(double d) {
-        struct.put(nodes[0], d);
+        struct.put(getNodes()[0], d);
         return this;
     }
 
@@ -99,7 +141,7 @@ public final class KRLFrame extends KRLStruct {
      * @return this - so that method call chaining is possible
      */
     public KRLFrame setY(double d) {
-        struct.put(nodes[1], d);
+        struct.put(getNodes()[1], d);
         return this;
     }
 
@@ -110,7 +152,7 @@ public final class KRLFrame extends KRLStruct {
      * @return this - so that method call chaining is possible
      */
     public KRLFrame setZ(double d) {
-        struct.put(nodes[2], d);
+        struct.put(getNodes()[2], d);
         return this;
     }
 
@@ -121,7 +163,7 @@ public final class KRLFrame extends KRLStruct {
      * @return this - so that method call chaining is possible
      */
     public KRLFrame setA(double d) {
-        struct.put(nodes[3], d);
+        struct.put(getNodes()[3], d);
         return this;
     }
 
@@ -132,7 +174,7 @@ public final class KRLFrame extends KRLStruct {
      * @return this - so that method call chaining is possible
      */
     public KRLFrame setB(double d) {
-        struct.put(nodes[4], d);
+        struct.put(getNodes()[4], d);
         return this;
     }
 
@@ -143,7 +185,7 @@ public final class KRLFrame extends KRLStruct {
      * @return this - so that method call chaining is possible
      */
     public KRLFrame setC(double d) {
-        struct.put(nodes[5], d);
+        struct.put(getNodes()[5], d);
         return this;
     }
 
@@ -154,11 +196,19 @@ public final class KRLFrame extends KRLStruct {
      */
     public double[] asArray() {
 
-        double[] arr = new double[nodes.length];
+        double[] arr = new double[getNodes().length];
         for (int i = 0; i < arr.length; i++) {
-            arr[i] = struct.get(nodes[i]);
+            arr[i] = struct.get(getNodes()[i]);
         }
         return arr;
+    }
+
+    public double[] asArrayXToZ() {
+        return new double[]{struct.get("X"), struct.get("Y"), struct.get("Z")};
+    }
+
+    public double[] asArrayAToC() {
+        return new double[]{struct.get("A"), struct.get("B"), struct.get("C")};
     }
 
     @Override

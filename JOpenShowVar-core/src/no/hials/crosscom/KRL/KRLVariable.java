@@ -25,6 +25,7 @@
  */
 package no.hials.crosscom.KRL;
 
+import no.hials.crosscom.KRL.structs.KRLE6Axis;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
