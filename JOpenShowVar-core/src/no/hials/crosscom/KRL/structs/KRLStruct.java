@@ -25,12 +25,7 @@
  */
 package no.hials.crosscom.KRL.structs;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 import no.hials.crosscom.KRL.KRLVariable;
 
 /**
@@ -40,16 +35,12 @@ import no.hials.crosscom.KRL.KRLVariable;
  */
 public abstract class KRLStruct extends KRLVariable {
 
-    private final Set<String> nodes = new HashSet<>();
+    private final String[] nodes;
 
     public KRLStruct(String name, String[] nodes) {
-        this(name, Arrays.asList(nodes));
+        super(name);
+        this.nodes = nodes; 
     }
-    
-     public KRLStruct(String name, Collection<String> nodes) {
-          super(name);
-          this.nodes.addAll((nodes));
-     }
 
     @Override
     public abstract HashMap getValue();
@@ -61,7 +52,7 @@ public abstract class KRLStruct extends KRLVariable {
      * @return the name of the variables that this struct contains
      */
     public String[] getNodes() {
-        return nodes.toArray(new String[nodes.size()]);
+        return nodes.clone();
     }
 
     @Override
@@ -89,8 +80,7 @@ public abstract class KRLStruct extends KRLVariable {
         StringBuilder sb = new StringBuilder();
         sb.append("{");
         int i = 0;
-        for (Iterator<String> it = nodes.iterator(); it.hasNext();i++) {
-            String str = it.next();
+        for (String str : nodes) {
              if (map.containsKey(str)) {
                 Object get = map.remove(str);
                 sb.append(str).append(" ").append(get);

@@ -110,6 +110,6 @@ public final class Callback {
 
     @Override
     public String toString() {
-        return "Callback{" + "variable=" + variableName + ", id=" + id + ", option=" + option + ", readTime=" + (readTime / 1000000) + "ms , value=" + strValue + '}';
+        return "Callback{" + "variable=" + variableName + ", id=" + id + ", option=" + option + ", readTime=" + (readTime / 1000000) + "ms, value=" + strValue + '}';
     }
 }

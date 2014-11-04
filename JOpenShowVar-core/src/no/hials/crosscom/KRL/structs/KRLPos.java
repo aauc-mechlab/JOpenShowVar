@@ -25,8 +25,6 @@
  */
 package no.hials.crosscom.KRL.structs;
 
-import no.hials.crosscom.KRL.structs.KRLFrame;
-
 /**
  * Represents a Real variable from the KRL language
  *

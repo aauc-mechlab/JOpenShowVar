@@ -27,6 +27,7 @@ package no.hials;
 
 import java.io.IOException;
 import java.util.Arrays;
+import no.hials.crosscom.Callback;
 import no.hials.crosscom.CrossComClient;
 import no.hials.crosscom.KRL.structs.KRLAxis;
 import no.hials.crosscom.KRL.KRLBool;
@@ -35,6 +36,8 @@ import no.hials.crosscom.KRL.KRLEnum;
 import no.hials.crosscom.KRL.structs.KRLPos;
 import no.hials.crosscom.KRL.KRLReal;
 import no.hials.crosscom.KRL.KRLVariable;
+import no.hials.crosscom.Request;
+import org.omg.PortableServer.REQUEST_PROCESSING_POLICY_ID;
 
 /**
  * Test program to see if everything is ok. Remember to set the IP and Port to
@@ -45,7 +48,7 @@ import no.hials.crosscom.KRL.KRLVariable;
 public class Test {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        try (CrossComClient client = new CrossComClient("158.38.85.126", 7000)) {
+        try (CrossComClient client = new CrossComClient("158.38.140.195", 7000)) {
 
             KRLPos pos = new KRLPos("MYPOS");
             pos.setX(2);
@@ -59,6 +62,12 @@ public class Test {
             KRLAxis axis = new KRLAxis("MYAXIS");
             client.readVariable(axis);
             System.out.println(axis);
+            System.out.println(Arrays.toString(axis.asArray()));
+            
+            KRLE6Axis e6axis = new KRLE6Axis("MYE6AXIS");
+            client.readVariable(e6axis);
+            System.out.println(e6axis);
+            System.out.println(Arrays.toString(e6axis.asArray()));
 
             KRLE6Axis axisAct = KRLVariable.AXIS_ACT(); // the same as new KRLE6Axis($AXIS_ACT)
             client.readVariable(axisAct);
@@ -89,6 +98,17 @@ public class Test {
             System.out.println(mode);
 
             System.out.println(Arrays.toString(client.readJointAngles()));
+            
+            
+            for (int i = 0; i < 10; i++) {
+                Callback sendRequest = client.sendRequest(new Request(0, "MYPOS"));
+                System.out.println(sendRequest);
+            }
+            
+            for (int i = 0; i < 10; i++) {
+                Callback sendRequest = client.sendRequest(new Request(0, "MYPOS", "{X 10,Y 10,Z 10}"));
+                System.out.println(sendRequest);
+            }
 
         }
     }
