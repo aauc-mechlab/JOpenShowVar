@@ -9,14 +9,12 @@ making it possible to use different input devices and to develop alternative con
 
 JOpenShowVar may be used to connect to a real KRC controller or a simulated one using the KUKA.OfficeLite package.
 
+Demo video showing a KUKA KR6 R900 sixx being controlled using JOpenShowVar as the communication interface:
+https://www.youtube.com/watch?v=6aZZAK4oyGg
+
 References
 ===========
 Filippo Sanfilippo, Lars Ivar Hatledal, Houxiang Zhang, Massimiliano Fago and Kristin Ytterstad Pettersen. JOpenShowVar: an Open-Source Cross-Platform Communication Interface to Kuka Robots. In Proceeding of the IEEE International Conference on Information and Automation (ICIA), Hailar, China. 2014, 1154–1159.
-
-Video showing a KUKA KR6 R900 sixx being controlled using JOpenShowVar as the communication interface
-https://www.youtube.com/watch?v=6aZZAK4oyGg
-
-
 
 Changelog
 ===========
