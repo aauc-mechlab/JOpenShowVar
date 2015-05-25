@@ -3,7 +3,7 @@ JOpenShowVar
 
 JOpenShowVar is a Java open-source cross-platform communication interface to Kuka robots that allows for 
 reading and writing variables and data structures of the controlled manipulators. This interface, which is
-compatible with all Kuka robots that use KR C4 and previous versions, runs as a client on a remote computer 
+compatible with all Kuka robots that uses the KR C4 controller, runs as a client on a remote computer 
 connected with the Kuka controller via TCP/IP. JOpenShowVar opens up to a variety of possible applications 
 making it possible to use different input devices and to develop alternative control methods.
 
