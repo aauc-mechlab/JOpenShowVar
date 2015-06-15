@@ -33,11 +33,10 @@ import no.hials.crosscom.KRL.structs.KRLAxis;
 import no.hials.crosscom.KRL.KRLBool;
 import no.hials.crosscom.KRL.structs.KRLE6Axis;
 import no.hials.crosscom.KRL.KRLEnum;
-import no.hials.crosscom.KRL.structs.KRLPos;
 import no.hials.crosscom.KRL.KRLReal;
 import no.hials.crosscom.KRL.KRLVariable;
+import no.hials.crosscom.KRL.structs.KRLPos;
 import no.hials.crosscom.Request;
-import org.omg.PortableServer.REQUEST_PROCESSING_POLICY_ID;
 
 /**
  * Test program to see if everything is ok. Remember to set the IP and Port to
@@ -48,11 +47,13 @@ import org.omg.PortableServer.REQUEST_PROCESSING_POLICY_ID;
 public class Test {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        try (CrossComClient client = new CrossComClient("158.38.140.195", 7000)) {
+
+        try (CrossComClient client = new CrossComClient("localhost", 7000)) {
 
             KRLPos pos = new KRLPos("MYPOS");
             pos.setX(2);
             pos.setY(1);  //MYPOS is defined manually in $config.dat
+            pos.setXToZ(1, 2, 3);
             client.writeVariable(pos);
             System.out.println(pos);
 

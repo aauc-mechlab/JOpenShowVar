@@ -47,7 +47,7 @@ public class Test2 {
      * @throws IOException on IO error
      */
     public static void main(String[] args) throws IOException {
-        try (CrossComClient client = new CrossComClient("158.38.85.126", 7000)) {
+        try (CrossComClient client = new CrossComClient("localhost", 7000)) {
 
             //Comparison between v0.1 and v0.2
             //v0.1 read
