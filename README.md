@@ -14,7 +14,9 @@ https://www.youtube.com/watch?v=6aZZAK4oyGg
 
 References
 ===========
-Filippo Sanfilippo, Lars Ivar Hatledal, Houxiang Zhang, Massimiliano Fago and Kristin Ytterstad Pettersen. JOpenShowVar: an Open-Source Cross-Platform Communication Interface to Kuka Robots. In Proceeding of the IEEE International Conference on Information and Automation (ICIA), Hailar, China. 2014, 1154–1159.
+* Filippo Sanfilippo, Lars Ivar Hatledal, Houxiang Zhang, Massimiliano Fago and Kristin Ytterstad Pettersen. Controlling Kuka Industrial Robots: Flexible Communication Interface JOpenShowVar. IEEE Robotics & Automation Magazine 22(4):96-109, December 2015.
+
+* Filippo Sanfilippo, Lars Ivar Hatledal, Houxiang Zhang, Massimiliano Fago and Kristin Ytterstad Pettersen. JOpenShowVar: an Open-Source Cross-Platform Communication Interface to Kuka Robots. In Proceeding of the IEEE International Conference on Information and Automation (ICIA), Hailar, China. 2014, 1154–1159.
 
 Changelog
 ===========
