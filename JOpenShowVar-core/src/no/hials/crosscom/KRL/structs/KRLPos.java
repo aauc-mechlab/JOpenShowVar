@@ -64,7 +64,7 @@ public class KRLPos extends KRLFrame {
      * @param d the value to set
      */
     public void setS(double d) {
-        struct.put(getNodes()[6], d);
+        struct.put("S", d);
     }
 
     /**
@@ -73,6 +73,6 @@ public class KRLPos extends KRLFrame {
      * @param d the value to set
      */
     public void setT(double d) {
-        struct.put(getNodes()[7], d);
+        struct.put("T", d);
     }
 }
