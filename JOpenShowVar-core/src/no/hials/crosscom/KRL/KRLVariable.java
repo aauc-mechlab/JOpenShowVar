@@ -66,6 +66,15 @@ public abstract class KRLVariable {
     public String getName() {
         return name;
     }
+    
+    /**
+    * Return the Type of Variable that implements this class
+    *
+    * @return the Type of variable that implements this class
+    */
+    public String getType(){
+        return this.getClass().getSimpleName();
+    }
 
     /**
      * The time it took to read/write this variable
@@ -118,7 +127,7 @@ public abstract class KRLVariable {
         List<Byte> header = new ArrayList<>();
         List<Byte> block = new ArrayList<>();
 
-        byte hbyte = (byte) ((cmd.length >> 8) & 0xff00);
+        byte hbyte = (byte) ((cmd.length & 0xff00)>>8);
         byte lbyte = (byte) (cmd.length & 0x00ff);
 
         int index = 0;
@@ -128,10 +137,10 @@ public abstract class KRLVariable {
         for (int i = 0; i < cmd.length; i++) {
             block.add(index++, cmd[i]);
         }
-        hbyte = (byte) ((block.size() >> 8) & 0xff00);
+        hbyte = (byte) ((block.size() & 0xff00)>>8);
         lbyte = (byte) (block.size() & 0x00ff);
 
-        byte hbytemsg = (byte) ((id >> 8) & 0xff00);
+        byte hbytemsg = (byte) ((id & 0xff00)>>8);
         byte lbytemsg = (byte) (id & 0x00ff);
 
         index = 0;
@@ -156,7 +165,7 @@ public abstract class KRLVariable {
         List<Byte> header = new ArrayList<>();
         List<Byte> block = new ArrayList<>();
 
-        byte hbyte = (byte) ((cmd.length >> 8) & 0xff00);
+        byte hbyte = (byte) ((cmd.length & 0xff00)>>8);
         byte lbyte = (byte) (cmd.length & 0x00ff);
 
         int index = 0;
@@ -167,7 +176,7 @@ public abstract class KRLVariable {
             block.add(index++, cmd[i]);
         }
 
-        hbyte = (byte) ((value.length >> 8) & 0xff00);
+        hbyte = (byte) ((value.length & 0xff00)>>8);
         lbyte = (byte) (value.length & 0x00ff);
 
         block.add(index++, hbyte);
@@ -176,10 +185,10 @@ public abstract class KRLVariable {
             block.add(index++, value[i]);
         }
 
-        hbyte = (byte) ((block.size() >> 8) & 0xff00);
+        hbyte = (byte) ((block.size() & 0xff00)>>8);
         lbyte = (byte) (block.size() & 0x00ff);
 
-        byte hbytemsg = (byte) ((id >> 8) & 0xff00);
+        byte hbytemsg = (byte) ((id & 0xff00)>>8);
         byte lbytemsg = (byte) (id & 0x00ff);
 
         index = 0;
