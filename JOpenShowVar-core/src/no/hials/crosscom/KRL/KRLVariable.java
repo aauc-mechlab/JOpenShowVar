@@ -66,6 +66,15 @@ public abstract class KRLVariable {
     public String getName() {
         return name;
     }
+    
+    /**
+    * Return the Type of Variable that implements this class
+    *
+    * @return the Type of variable that implements this class
+    */
+    public String getType(){
+        return this.getClass().getSimpleName();
+    }
 
     /**
      * The time it took to read/write this variable
